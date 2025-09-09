@@ -21,7 +21,7 @@ Our goals are to:
 |------------------|-------------------------|----------------|  
 | Michelle Hedrick | Team Lead / Backend Developer      | mdhdrck@gmail.com  |  
 | Joshua Kelley | Frontend Developer   | joshua.kelley5552471@gmail.com  |  
-| Chris Sisk       | <role>   | *[add email]*  |  
+| Christopher Sisk       | Developer   | cs.christophersisk@gmail.com  |  
 
 ## Tech Stack  
 - Framework: Django (Python)  
