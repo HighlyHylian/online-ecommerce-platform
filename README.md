@@ -20,7 +20,7 @@ Our goals are to:
 | Name             | Role                    | GitHub Email   |  
 |------------------|-------------------------|----------------|  
 | Michelle Hedrick | Team Lead / Backend Developer      | mdhdrck@gmail.com  |  
-| Joshua Kelley | <role>   | *[add email]*  |  
+| Joshua Kelley | Frontend Developer   | joshua.kelley5552471@gmail.com  |  
 | Chris Sisk       | <role>   | *[add email]*  |  
 
 ## Tech Stack  
