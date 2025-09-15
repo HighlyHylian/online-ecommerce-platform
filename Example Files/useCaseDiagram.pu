@@ -9,17 +9,18 @@ rectangle System {
 }
 
 rectangle DB {
-  usecase "Verify Payment Info" as U3
-  usecase "Prompt for Correct Info" as U4
-  usecase "Bill User" as U5
-  usecase "Display Success & Receipt" as U6
+'   usecase "Verify Payment Info" as U3
+'   usecase "Prompt for Correct Info" as U4
+'   usecase "Bill User" as U5
+'   usecase "Display Success & Receipt" as U6
 }
 
 User --> U1
 User --> U2
 System --> DB
-DB --> U3
-DB --> U4
-DB --> U5
-DB --> U6
+
+' DB --> U3
+' DB --> U4
+' DB --> U5
+' DB --> U6
 @enduml
