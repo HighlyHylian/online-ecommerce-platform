@@ -1,0 +1,21 @@
+@startuml US-09: Payment & Billing
+|User|
+start
+:Click "Continue to Payment";
+|System|
+:Display Payment Form;
+|User|
+:Enter information;
+
+|System|
+while (Validate input?) is (false)
+    |System|
+    :Prompt user to re-enter;
+    |User|
+    :Enter information;
+endwhile (true)
+|System|
+:Process Payment;
+:Display Confirmation;
+
+@enduml
