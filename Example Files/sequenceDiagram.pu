@@ -1,21 +1,16 @@
-@startuml
-left to right direction
+@startuml US-09: Payment & Billing
 actor User
+participant System
 
-rectangle System {
-  usecase "Continue to Payment" as U1
-  usecase "Enter Payment & Billing Info" as U2
-  usecase "Verify Payment Info" as U3
-  usecase "Prompt for Correct Info" as U4
-  usecase "Bill User" as U5
-  usecase "Display Success & Receipt" as U6
-}
+User -> System: Click "Continue to Payment"
+System -> User: Display Payment & Billing Form
 
-User --> U1
-U1 --> U2
-U2 --> U3
-U3 --> U4 : <<invalid>>
-U4 --> U3
-U3 --> U5 : <<valid>>
-U5 --> U6
+loop Until Payment Info is Valid
+    User -> System: Enter Payment & Billing Info
+    System -> System: Verify Payment Info
+    System -> User: Prompt to re-enter details if invalid
+end
+
+System -> System: Bill User
+System -> User: Display "Success" and Receipt
 @enduml

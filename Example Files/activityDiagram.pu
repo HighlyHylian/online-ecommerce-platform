@@ -1,0 +1,18 @@
+@startuml US-09: Payment & Billing
+start
+
+:Click "Continue to Payment";
+:Prompt User for Payment;
+
+:User Enters Payment Information;
+
+while (Validate input?) is (Invalid)
+    :Prompt user to re-enter;
+    :Enter payment;
+endwhile
+
+:Bill user;
+:Display success;
+
+stop
+@enduml
