@@ -1,21 +1,26 @@
 @startuml US-09: Payment & Billing
 left to right direction
 actor User
+actor DB
 
 rectangle System {
   usecase "Continue to Payment" as U1
   usecase "Enter Payment & Billing Info" as U2
-  usecase "Verify Payment Info" as U3
-  usecase "Prompt for Correct Info" as U4
-  usecase "Bill User" as U5
-  usecase "Display Success & Receipt" as U6
+}
+
+rectangle DB {
+'   usecase "Verify Payment Info" as U3
+'   usecase "Prompt for Correct Info" as U4
+'   usecase "Bill User" as U5
+'   usecase "Display Success & Receipt" as U6
 }
 
 User --> U1
-U1 --> U2
-U2 --> U3
-U3 --> U4 : <<invalid>>
-U4 --> U3
-U3 --> U5 : <<valid>>
-U5 --> U6
+User --> U2
+System --> DB
+
+' DB --> U3
+' DB --> U4
+' DB --> U5
+' DB --> U6
 @enduml
