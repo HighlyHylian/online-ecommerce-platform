@@ -1,0 +1,8 @@
+@startuml US-05 Display Cart Popup
+[*] --> PopupOpened : Click Cart Icon
+PopupOpened --> PopupClosed : Click Outside Popup
+PopupOpened --> Checkout : Click Checkout Button
+PopupClosed --> PopupOpened : Click Cart Icon
+PopupClosed --> [*] : Click Exit Button
+Checkout --> [*] : Complete Checkout
+@enduml
