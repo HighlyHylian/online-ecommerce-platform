@@ -1,0 +1,17 @@
+@startuml US-01 - User Account Creation
+actor User
+participant System
+
+User -> System: Click "Start Account Creation"
+System -> User: Display Account Creation Form
+
+loop Until Passwords Match
+    User -> System: Enter Personal Details & Passwords
+    System -> System: Validate Password Match
+    System -> User: Prompt to re-enter passwords if invalid
+end
+
+
+
+System -> User: Display "Success" and Create Account
+@enduml
