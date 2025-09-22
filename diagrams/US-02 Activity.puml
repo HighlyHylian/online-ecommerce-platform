@@ -1,0 +1,21 @@
+@startuml US-02 - Product Browsing Activity
+
+start
+:Navigate to product catalogue;
+repeat
+    switch()
+        case (Select Category Filters)
+            :Select category filters (e.g. brand, price, etc.);
+            :Displays products matching filters;
+        case (Search for Products)
+            :Enter search keywords;
+            :Displays products matching search keywords;
+        case (Sort Products)
+            :Select sorting method (e.g. price, popularity, etc.);
+            :Displays products sorted by selected method;
+        case (View Product Details)
+            stop
+    endswitch
+repeat while () is (More Browsing) not (End)
+stop
+@enduml

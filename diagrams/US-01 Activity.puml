@@ -1,4 +1,4 @@
-@startuml US-0? - Account Creation  Activity
+@startuml US-01 - Account Creation Activity
 
 start
 :Click "Create Account" on ribbon anywhere;
