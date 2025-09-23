@@ -28,7 +28,6 @@ repeat
                         :The system removes the address and confirms deletion;
                 endswitch
             repeat while () is (User manages addresses) not (User is done)
-            :The system saves changes and confirms update;
         case (Payment Methods)
             :User views, adds, edits, or deletes payment methods;
             :The system saves changes and confirms update;
