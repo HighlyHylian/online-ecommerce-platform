@@ -1,0 +1,24 @@
+@startuml US-07 Activity
+start  
+:User clicks "Checkout" button in cart popup or cart page;
+:User is taken to checkout page;
+repeat
+    repeat
+        :User selects shipping address;
+    repeat while () is (Address Not Valid) not (Address Valid)
+    :User selects payment method;
+    repeat
+        :User enters billing information;
+    repeat while () is (Billing Info Not Valid) not (Billing Info Valid)
+    :User confirms order;
+    :Order attempts to process;
+    if () then (Order Successful)
+        :Display order confirmation page;
+        stop
+    else (Order Fails)
+        :Display error message;
+        :Allow user to retry or cancel;
+    endif
+repeat while () is (Order Fails) not (Order Successful)
+stop
+@enduml
