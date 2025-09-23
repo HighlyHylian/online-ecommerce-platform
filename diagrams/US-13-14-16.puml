@@ -12,6 +12,7 @@ repeat
                 :User enters current and new password;
                 :The system validates and updates the password;
             repeat while () is (Fields invalid) not (Fields valid)
+            :Update password in system;
             :Display confirmation message for password change;
         case (Manage Addresses)
             :User views current list of addresses;
