@@ -1,4 +1,4 @@
-@startuml US-07 Activity
+@startuml US-08-09 Activity
 start  
 :User clicks "Checkout" button in cart popup or cart page;
 :User is taken to checkout page;

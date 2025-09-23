@@ -1,0 +1,10 @@
+@startuml US-10-11 Activity
+start
+:User navigates to order history page;
+:The system retrieves and displays a list of past orders;
+repeat
+    :User selects an order to view details;
+    :The system displays detailed information about the selected order;
+repeat while () is (User wants to view another order) not (User is done)
+stop
+@enduml
