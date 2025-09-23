@@ -1,0 +1,19 @@
+@startuml US-03a - Login
+:User opens login page;
+repeat
+    :User enters username and password;
+    if () then (Valid Credentials)
+        :Grant access to user;
+        stop
+    else (Invalid Credentials)
+        :Display relevant error message;
+    endif
+repeat while () is (Retry Login) not (Give Up/Forgot Password)
+if () then (Give Up)
+    :Redirect to homepage;
+    stop
+else (Forgot Password)
+    :Initiate password recovery process;
+    stop
+endif
+@enduml

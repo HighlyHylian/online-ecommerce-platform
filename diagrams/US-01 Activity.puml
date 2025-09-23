@@ -1,0 +1,12 @@
+@startuml US-01 - Account Creation Activity
+
+start
+:Click "Create Account" on ribbon anywhere;
+repeat
+    :Display Account Creation Form;
+    :Enter Account Details;
+repeat while () is (Error with Input) not (All Details Valid)
+:Submit Account Details;
+:Display "Success" and Create Account;
+stop
+@enduml

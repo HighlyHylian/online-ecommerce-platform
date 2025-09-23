@@ -1,0 +1,7 @@
+@startuml US-04 Category Banner Activity
+start
+:User clicks on a category banner;
+:The system displays the category page;
+' This will be things such as a page for featured wheels, featured trucks, etc.
+stop
+@enduml

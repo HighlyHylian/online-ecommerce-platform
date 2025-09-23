@@ -1,0 +1,14 @@
+@startuml US-05 Display Cart Popup - Activity
+start
+:Click Cart Icon;
+:Open Cart Popup;
+
+if () then (Clicked Checkout Button)
+  :Proceed to Cart/Checkout;
+  :Complete Checkout;
+  stop
+else (Click Outside Popup)
+    :Close Popup;
+endif
+stop
+@enduml
