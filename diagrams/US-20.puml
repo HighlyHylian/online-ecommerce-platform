@@ -1,0 +1,33 @@
+@startuml US-20 - Activity
+start
+:User clicks "Notify when available" button on out-of-stock item;
+:System records user's interest in the item;
+' while () is (Item is out of stock) not (Item is back in stock)
+'     if () then (Item is back in stock)
+'         :System sends notification email to user;
+'         :User receives notification email;
+'         stop
+'     else (Item is still out of stock)
+'         :Wait for trigger;
+'         if () then (User decides to cancel notification)
+'             :User clicks "Cancel Notification" link in on website;
+'             :System removes user's interest record;
+'             stop
+'         else (User still wants notification)
+'             :Continue waiting;
+'         endif
+'     endif
+' endwhile
+repeat
+:Wait for trigger;
+if () then (Item is back in stock)
+    :System sends notification email to user;
+    :System removes user's interest record;
+    stop
+else (Item is still out of stock)
+    :Continue waiting;
+endif
+repeat while () is (User interested) not (User wants to cancel)
+:User clicks "Cancel Notification" link in on website;
+:System removes user's interest record;
+stop
