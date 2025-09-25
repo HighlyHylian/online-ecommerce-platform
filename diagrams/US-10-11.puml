@@ -1,4 +1,4 @@
-@startuml US-10-11 Activity
+@startuml US-10-11-26 Activity
 start
 :User navigates to order history page;
 repeat  
