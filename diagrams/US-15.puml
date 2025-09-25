@@ -1,0 +1,16 @@
+@startuml US-15 - Activity 
+start
+:User navigates to sign in page;
+:User clicks "Forgot Password" link;
+:User enters their email address;
+:System sends password reset email;
+:User clicks on the link in the email;
+repeat
+    :User enters new password;
+    :User confirms new password;
+    :System validates new password;
+repeat while () is (Password Not Valid) not (Password Valid)
+:System updates user's password;
+:User is logged in with new password;
+stop
+@enduml
