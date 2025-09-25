@@ -1,0 +1,6 @@
+@startuml US-22 Activity
+start
+:User scrolls to bottom of page;
+:System displays footer with relevant links and information;
+stop
+@enduml
