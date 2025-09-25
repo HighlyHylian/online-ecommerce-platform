@@ -1,0 +1,39 @@
+@startuml US-13-14-16 Activity
+start
+:User navigates to account page;
+repeat
+    :The system displays account options (Edit Profile, Change Password, Manage Addresses, Payment Methods);
+    switch ()
+        case (Edit Profile)
+            :User updates profile details;
+            :The system saves changes and confirms update;
+        case (Change Password)
+            repeat
+                :User enters current and new password;
+                :The system validates and updates the password;
+            repeat while () is (Fields invalid) not (Fields valid)
+            :Update password in system;
+            :Display confirmation message for password change;
+        case (Manage Addresses)
+            :User views current list of addresses;
+            repeat
+                switch ()
+                    case (Add Address)
+                        :User enters new address details;
+                        :The system saves the new address and confirms addition;
+                    case (Edit Address)
+                        :User selects an address to edit and updates details;
+                        :The system saves changes and confirms update;
+                    case (Delete Address)
+                        :User selects an address to delete;
+                        :The system removes the address and confirms deletion;
+                endswitch
+            repeat while () is (User manages addresses) not (User is done)
+        case (Payment Methods)
+            :User views, adds, edits, or deletes payment methods;
+            :The system saves changes and confirms update;
+            ' note: Payment is not validated until billing during checkout
+    endswitch
+repeat while () is (User continues to account page) not (User is done)
+stop
+@enduml

@@ -1,0 +1,6 @@
+@startuml US-07 Activity
+start
+:User clicks "Remove" button on item in cart popup;
+:Item is removed from cart list; 
+stop
+@enduml
