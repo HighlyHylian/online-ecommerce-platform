@@ -3,12 +3,17 @@ actor User
 participant System
 
 User -> System: Click "Start Account Creation"
+activate System
 System -> User: Display Account Creation Form
+deactivate System
 
 loop Until Passwords Match
     User -> System: Enter Personal Details & Passwords
+    activate System 
     System -> System: Validate Password Match
     System -> User: Prompt to re-enter passwords if invalid
+    
+    deactivate System
 end
 
 

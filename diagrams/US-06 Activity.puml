@@ -5,8 +5,8 @@ start
 if () then (Potential To Open Cart Popup)
   :Display Cart Popup;
 else (No Popup)
-    :Stay on Product Page;
+  :Stay on Product Page;
 endif
-` Issue #77 has a relevant comment
+' Issue #77 has a relevant comment
 stop
 @enduml

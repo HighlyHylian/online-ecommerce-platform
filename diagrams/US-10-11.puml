@@ -1,4 +1,4 @@
-@startuml US-10-11 Activity
+@startuml US-10-11-26 Activity
 start
 :User navigates to order history page;
 repeat  
@@ -7,8 +7,12 @@ repeat
     :The system displays detailed information about the selected order;
     if () then (User wants to reorder)
         :User clicks "Reorder" button;
-        :The system adds items from the past order to the current cart;
-        :Display confirmation message that items have been added to cart;
+        if () then (Items out of stock)
+            :Display out of stock message;
+        else (Items in stock)
+            :The system adds items from the past order to the current cart;
+            :Display confirmation message that items have been added to cart;
+        endif
     else (User does not want to reorder)
         :User reviews order details without reordering;
     endif

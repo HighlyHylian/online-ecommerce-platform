@@ -1,0 +1,24 @@
+@startuml US-17-18 - Activity
+start
+repeat
+    switch ()
+        case (User clicks + button)
+            :Increase item quantity in cart;
+        case (User clicks - button)
+            :Decrease item quantity in cart;
+        case (User types quantity directly)
+            if () then (Quantity is Valid)
+                :Update item quantity in cart;
+            else (Quantity is Not Valid)
+                :Display error message;
+            endif
+    endswitch
+    :Update total price in cart;
+    if () then (Quantity is 0)
+        :Remove item from cart;
+    else (Quantity > 0)
+        :Keep item in cart;
+    endif
+repeat while () is (User adjusts quantity again) not (User is done)
+stop
+@enduml

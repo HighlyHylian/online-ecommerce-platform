@@ -4,6 +4,8 @@ repeat
     :User enters username and password;
     if () then (Valid Credentials)
         :Grant access to user;
+        :Redirect to user dashboard;
+        :Display personalized welcome message;
         stop
     else (Invalid Credentials)
         :Display relevant error message;

@@ -1,0 +1,62 @@
+
+
+@startuml US-01, US-03, US-04, US-05, US-07, US-10, US-27
+left to right direction
+actor User
+actor DB
+actor 3rdPartyValidation
+
+rectangle System {
+  usecase "User Account Creation" as U1
+  usecase "Product Browsing and Searching" as U2
+  usecase "User Login/Logout" as U3
+  usecase "Category" as U4
+  
+  usecase "View/Add/Remove Product to Cart" as U5
+  
+  usecase "Checkout" as U6
+  usecase "Payment and Billing/Discount Code" as U7
+  usecase "Order History" as U8
+  
+
+
+
+}
+
+rectangle DB {
+'   usecase "Verify Payment Info" as U3
+'   usecase "Prompt for Correct Info" as U4
+'   usecase "Bill User" as U5
+'   usecase "Display Success & Receipt" as U6
+}
+
+rectangle 3rdPartyValidation{
+
+}
+
+User --> U1
+U1 --> DB
+User --> U2
+U2 --> DB
+User --> U3
+U3 --> DB
+User --> U4 
+U4 --> DB
+User --> U5
+U5 --> DB
+User --> U6
+U6 --> DB
+User --> U7
+U7 --> 3rdPartyValidation
+
+User --> U8
+U8 --> DB
+
+
+
+
+' DB --> U3
+' DB --> U4
+' DB --> U5
+' DB --> U6
+@enduml

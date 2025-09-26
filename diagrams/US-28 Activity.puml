@@ -1,0 +1,11 @@
+@startuml US-28 Activity
+start
+:User clicks "Share" button on product page;
+:System opens dialogue with copy link button;
+if () then  (User clicks "Copy Link" button)
+    :System copies product link to clipboard;
+else (User closes dialogue)
+    :Dialogue closes without copying link;
+endif
+stop
+@enduml
