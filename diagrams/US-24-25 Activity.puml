@@ -1,0 +1,38 @@
+@startuml US-24-25 Activity
+start
+:User navigates to product page;
+:User scrolls to view product reviews;
+if () then (Reviews Available)
+	:Display reviews section with existing reviews;
+else (No Reviews Available)
+	:Display message indicating no reviews are available;
+endif
+repeat
+	switch ()
+		case (User clicks "Write a Review")
+			:User fills out review form;
+			:User submits review;
+			:System saves the review and displays a confirmation message;
+		case (User clicks "Edit Review")
+			:User selects a review to edit;
+			:User edits the review;
+			:User submits the edited review;
+			:System saves the edited review and displays a confirmation message;
+		case (User clicks "Delete Review")
+			:User selects a review to delete;
+			:User confirms the deletion;
+			:System deletes the review and displays a confirmation message;
+		case (User clicks "Report Review")
+			:User selects a review to report;
+			:User confirms the report;
+			:System sends a report to the review owner and displays a confirmation message;
+		case (User clicks "Sort by")
+			:User selects a sorting option;
+			:System sorts the reviews by the selected option and displays the sorted reviews;
+		case (User clicks "Filter by")
+			:User selects a filter option;
+			:System filters the reviews by the selected option and displays the filtered reviews;
+	endswitch	
+repeat while () is (User interacts with reviews) not (User is done)
+stop
+@enduml
