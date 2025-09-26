@@ -1,0 +1,55 @@
+@startuml US-28, US-31, US-32, US-33, US-34, US-35, US-36 US-38, US-39, US-40, US-41, US-42
+left to right direction
+actor User
+actor DB
+actor Seller
+
+rectangle System {
+  usecase "Share Product" as U1
+  usecase "Subscribe to News" as U2
+  usecase "Terms and Privacy Agreement" as U3
+  usecase "Human/Contact Method Verification" as U4
+  usecase "Secure Forms" as U5
+  usecase "Secure Payments" as U6
+  usecase "Rate Limiting" as U7
+  usecase "HTTPS" as U8
+  usecase "Session Timeout" as U9
+  usecase "Feedback Request" as U10
+  usecase "Device Mobility" as U11
+
+
+  
+  
+
+}
+
+rectangle DB {
+   
+}
+
+rectangle Seller {
+   
+}
+
+User --> U1
+User --> U2
+U2 --> DB
+User --> U3
+U3 --> DB
+User --> U4
+
+User --> U5
+U5 --> DB
+User --> U6
+
+User --> U7
+User --> U8
+User --> U9
+U9 --> DB
+User --> U10
+U10 --> DB
+User --> U11
+
+
+
+@enduml
