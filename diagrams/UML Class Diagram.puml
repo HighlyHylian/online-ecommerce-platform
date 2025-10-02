@@ -1,0 +1,103 @@
+@startuml DeckedOutEcommerce
+
+title Decked Out - E-Commerce Store Class Diagram
+
+' Core system
+class Store {
+  - name: String
+  - url: String
+  + browseProducts(): List<Product>
+  + checkout(cart: ShoppingCart): Order
+}
+
+' Users
+class User {
+  - username: string
+  - password: string
+  - name: String
+  
+  + login()
+  + logout()
+}
+
+class Customer {
+  - address: String
+  + addToCart(product: Product, qty: int)
+  + placeOrder(cart: ShoppingCart): Order
+}
+
+class Admin {
+  + addProduct(product: Product)
+  + removeProduct(productId: int)
+  + updateInventory(productId: int, qty: int)
+}
+
+User <|-- Customer
+User <|-- Admin
+
+' Products
+class Product {
+  - productId: int
+  - name: String
+  - description: String
+  - price: double
+  - stockQty: int
+}
+
+class Category {
+  - categoryId: int
+  - name: String
+  + addProduct(product: Product)
+}
+
+Category "1" o-- "*" Product
+
+' Cart & Orders
+class ShoppingCart {
+  - cartId: int
+  - items: List<CartItem>
+  + addItem(product: Product, qty: int)
+  + removeItem(productId: int)
+  + getTotal(): double
+}
+
+class CartItem {
+  - product: Product
+  - quantity: int
+}
+
+ShoppingCart "1" o-- "*" CartItem
+CartItem "*" --> "1" Product
+
+class Order {
+  - orderId: int
+  - date: Date
+  - total: double
+  - status: String
+  + updateStatus(newStatus: String)
+}
+
+Customer "1" --> "*" Order
+Order "1" o-- "*" CartItem
+
+' Payment & Shipping
+class Payment {
+  - paymentId: int
+  - amount: double
+  - method: String
+  - status: String
+  + processPayment()
+}
+
+class Shipment {
+  - shipmentId: int
+  - carrier: String
+  - trackingNumber: String
+  - status: String
+  + updateStatus(newStatus: String)
+}
+
+Order "1" --> "1" Payment
+Order "1" --> "1" Shipment
+
+@enduml
