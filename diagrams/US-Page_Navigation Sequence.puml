@@ -1,0 +1,55 @@
+@startuml US-02, US-04, US-21, US-22, US-25, US-28, US-40- Page navigation and functions
+
+actor User
+participant System
+
+User -> System: User clicks "Decked Out logo"
+activate System
+System -> User: system redirects to homepage
+deactivate System
+
+User -> System: User clicks a cateogory
+activate System
+System -> User: system filters product list
+deactivate System
+
+User -> System: User scrolls to footer
+activate System
+System -> User: System shows link to Contact, About Us, Privacy Policy Tab
+deactivate System 
+
+User -> System: User naviagetes to product catalog
+activate System
+System -> User: system displays list of products
+deactivate System
+
+User -> System: User uses search bar to search for a product
+activate System
+System -> User: system displays search results
+deactivate System
+
+User -> System: User clicks on a product
+activate System
+System -> User: system displays product details(name, price, description, image)
+deactivate System
+
+
+User -> System: User views product page
+activate System
+System -> User: system displays product reviews and ratings
+deactivate System
+
+User -> System: User clicks "Share" on product page
+activate System
+System -> User: system provides a url and media sharing options
+deactivate System
+
+User -> System: User stays inactive for 20+ minutes
+activate System
+System -> User: system logs out user and displays homepage
+deactivate System
+
+
+
+
+@enduml

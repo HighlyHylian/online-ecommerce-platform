@@ -1,0 +1,54 @@
+@startuml US-11, US-12, US-14, US-15, US-16, US-17, US-18, US-19, US-20, US-21, US-22, US-24, US-25, US-26
+left to right direction
+actor User
+actor DB
+actor Seller
+
+rectangle System {
+  usecase "Order Status" as U1
+  usecase "Contact Support" as U2
+  usecase "View/Update Profile" as U3
+  usecase "Forgot/Change Password" as U4
+  usecase "Update Shipping Information" as U5
+  usecase "Add/Decrease product Quantity in Cart" as U6
+  usecase "Availability Notification" as U7
+  usecase "Navigate to Home/Footer" as U8
+  usecase "Create/View Product Review" as U9
+  usecase "Reorder Purchase" as U10
+
+
+
+  
+  
+
+}
+
+rectangle DB {
+   
+}
+
+rectangle Seller {
+   
+}
+
+User --> U1
+U1 --> Seller
+User --> U2
+User --> U3
+U3 --> DB
+User --> U4
+U4 --> DB
+User --> U5
+U5 --> DB
+User --> U6
+U6 --> DB
+User --> U7
+User --> U8
+User --> U9
+U9 --> DB
+User --> U10
+U10 --> DB
+
+
+
+@enduml

@@ -1,0 +1,74 @@
+@startuml Checkout and payment Process: US-05, US-06, US-07, US-08, US-09, US-10, Us-11,  US-18, US-19, US-26
+actor User
+participant System
+
+User -> System: User adds/remove desired item to cart
+activate System
+System -> User: system updates cart list and cart total
+deactivate System
+
+User -> System: User adds product to cart
+activate System
+System -> User: system updates cart with new product and total
+deactivate System
+
+User -> System: User adds/remove product quantity in cart
+activate System
+System -> User: system updates cart quantity and total
+deactivate System
+
+
+User -> System: User clicks "Checkout"
+activate System
+System -> User: system displays checkout form
+deactivate System
+
+User -> System: User enters shipping information
+activate System
+System -> User: system validates and saves shipping information
+deactivate System
+
+User -> System: User clicks "Continue to Payment"
+activate System
+System -> User: system displays payment form
+deactivate System
+
+loop Until Payment is Successful
+    User -> System: User enters payment details
+    activate System 
+    System -> System: Process Payment
+    System -> User: Prompt to re-enter payment details if invalid
+    
+    deactivate System
+end
+
+System -> User: Display "Payment Successful" and order confirmation
+
+User -> System: User clicks on "Order Status"
+activate System
+System -> User: system displays order status and tracking information
+deactivate System
+
+User -> System: User clicks "View Order History"
+activate System
+System -> User: system displays past orders and details
+deactivate System
+
+User -> System: User clicks "Reorder Purchase"
+activate System
+System -> User: system adds items to cart and updates total
+deactivate System
+
+
+
+
+
+
+
+
+
+
+
+
+
+@enduml

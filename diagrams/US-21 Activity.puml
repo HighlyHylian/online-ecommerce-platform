@@ -1,0 +1,6 @@
+@startuml US-21 Activity
+start
+:User clicks "Decked Out" button on header;
+:System navigates to Decked Out home page;
+stop
+@enduml

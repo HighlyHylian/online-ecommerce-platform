@@ -8,5 +8,11 @@ repeat
 repeat while () is (Error with Input) not (All Details Valid)
 :Submit Account Details;
 :Display "Success" and Create Account;
+:Send verification email;
+if () then (User clicks verification link)
+    :Verify email and activate account;
+else (User does not verify email)
+    :Account can be used but no recovery options;
+endif
 stop
 @enduml

@@ -1,4 +1,4 @@
-@startuml US-13-14-16 Activity
+@startuml US-13-14-16-17-31 Activity
 start
 :User navigates to account page;
 repeat
@@ -33,6 +33,9 @@ repeat
             :User views, adds, edits, or deletes payment methods;
             :The system saves changes and confirms update;
             ' note: Payment is not validated until billing during checkout
+        case (News and Offers Preferences)
+            :User updates preferences for receiving news and offers;
+            :The system saves changes and confirms update;
     endswitch
 repeat while () is (User continues to account page) not (User is done)
 stop

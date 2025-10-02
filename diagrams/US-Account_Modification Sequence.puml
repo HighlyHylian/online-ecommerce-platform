@@ -1,0 +1,77 @@
+@startuml US-01, US-03, US-13, US-14, US-16 -Account Modification
+actor User
+participant System
+
+User -> System: Click "Start Account Creation"
+activate System
+System -> User: Display Account Creation Form
+deactivate System
+
+loop Until Passwords Match
+    User -> System: Enter Personal Details & Passwords
+    activate System 
+    System -> System: Validate Password Match
+    System -> User: Prompt to re-enter passwords if invalid
+    
+    deactivate System
+end
+System -> User: Display "Success" and Create Account
+
+User -> System: User clicks "Login"
+activate System
+System -> User: system displays login form
+deactivate System
+
+loop Until Username/Password Match
+    User -> System: Enter Username & Password
+    activate System 
+    System -> System: Validate Username and Password Match
+    System -> User: Prompt to re-enter Username or Password if invalid
+    
+    deactivate System
+end
+System -> User: Display "Success" and Login 
+
+User -> System: User clicks "My Account"
+activate System
+System -> User:system displays user profile information 
+deactivate System
+
+User -> System: User goes to profile
+activate System
+System -> User: system displays profile information
+deactivate System
+
+User -> System: User clicks Update Profile 
+activate System
+System -> User: system displays editorial form
+deactivate System
+
+User -> System: User edits profile
+activate System
+System -> User: system saves changes and displays "Success"
+deactivate System
+
+User -> System: User clicks "Change Password"
+activate System
+System -> User: System displays change password form
+deactivate System
+
+User -> System: User enters new password
+activate System
+System -> User: System validates and updates password
+deactivate System
+
+User -> System: User clicks "Logout"
+activate System
+System -> User: system logs out and displays homepage
+deactivate System
+
+
+
+
+
+
+
+
+@enduml
