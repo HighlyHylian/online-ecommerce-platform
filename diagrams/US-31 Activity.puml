@@ -1,0 +1,14 @@
+@startuml US-31 Activity
+start
+:User clicks "Notifications" button on footer;
+:System redirects user to subscription page;
+switch ()
+  case (User clicks "Subscribe" button")
+    :System subscribes user to notifications through web push;
+  case (User clicks "Unsubscribe" button")
+    :System unsubscribes user to notifications through web push;
+  case (User closes the page)
+    :User leaves subscription page without changes;
+endswitch
+stop
+@enduml
