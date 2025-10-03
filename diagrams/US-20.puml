@@ -31,3 +31,4 @@ repeat while () is (User interested) not (User wants to cancel)
 :User clicks "Cancel Notification" link in on website;
 :System removes user's interest record;
 stop
+@enduml
