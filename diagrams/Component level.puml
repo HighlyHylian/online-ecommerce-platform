@@ -1,0 +1,78 @@
+@startuml DeckedOutComponentDiagram
+
+title Decked Out - Component Level Design
+
+actor Buyer
+actor Seller
+actor Admin
+
+' ==== Frontend ====
+component "Web/Mobile UI" as UI {
+  [Registration & Login UI]
+  [Product Browsing & Search UI]
+  [Shopping Cart UI]
+  [Checkout UI]
+  [Seller Dashboard UI]
+  [Admin Dashboard UI]
+}
+
+' ==== Backend Services ====
+component "Authentication & Account Service" as Auth {
+  [User Registration]
+  [Login/Logout]
+  [Account Management]
+  [Role-based Access]
+}
+
+component "Product Management Service" as Product {
+  [Product Browsing & Search]
+  [Product Listing]
+  [Category Management]
+}
+
+component "Shopping Cart Service" as Cart {
+  [Add/Remove/Update Items]
+  [Cart Summary & Price Calculation]
+}
+
+component "Order & Checkout Service" as Order {
+  [Order Processing]
+  [Checkout Workflow]
+  [Return Processing]
+}
+
+component "Payment Service" as Payment {
+  [Payment Gateway Integration]
+  [Refund Processing]
+}
+
+component "Admin Management Service" as AdminService {
+  [User/Seller Account Control]
+  [Product Database Management]
+  [Analytics Dashboard]
+}
+
+' ==== Database Layer ====
+database "SQL Database" as DB
+
+' ==== Connections ====
+Buyer --> UI
+Seller --> UI
+Admin --> UI
+
+UI --> Auth
+UI --> Product
+UI --> Cart
+UI --> Order
+UI --> AdminService
+
+Order --> Payment
+Order --> DB
+Payment --> DB
+
+Cart --> DB
+Product --> DB
+Auth --> DB
+AdminService --> DB
+
+@enduml

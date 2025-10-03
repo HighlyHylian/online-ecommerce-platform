@@ -1,63 +1,71 @@
-@startuml DeckedOutEcommerce
+@startuml DeckedOutClassDiagram
 
-title Decked Out - E-Commerce Store Class Diagram
+title Decked Out - Class Diagram (Based on SRS)
 
-' Core system
-class Store {
-  - name: String
-  - url: String
-  + browseProducts(): List<Product>
-  + checkout(cart: ShoppingCart): Order
-}
-
-' Users
+' ==== User Hierarchy ====
 class User {
-  - username: string
-  - password: string
-  - name: String
-  
+  - userId: int
+  - username: String
+  - email: String
+  - password: String
+  + register()
   + login()
   + logout()
+  + updateAccount()
+  + deleteAccount()
 }
 
-class Customer {
-  - address: String
+class Buyer {
+  + browseProducts()
+  + searchProducts()
   + addToCart(product: Product, qty: int)
-  + placeOrder(cart: ShoppingCart): Order
+  + checkout(cart: ShoppingCart): Order
+  + returnProduct(orderId: int)
+  + viewPastOrders(): List<Order>
+}
+
+class Seller {
+  + addProduct(product: Product)
+  + updateProduct(productId: int)
+  + removeProduct(productId: int)
+  + viewProducts(): List<Product>
 }
 
 class Admin {
-  + addProduct(product: Product)
-  + removeProduct(productId: int)
-  + updateInventory(productId: int, qty: int)
+  + manageUser(userId: int)
+  + manageSeller(sellerId: int)
+  + manageProducts()
+  + viewAnalytics()
 }
 
-User <|-- Customer
+User <|-- Buyer
+User <|-- Seller
 User <|-- Admin
 
-' Products
+' ==== Product & Categories ====
 class Product {
   - productId: int
   - name: String
   - description: String
   - price: double
   - stockQty: int
+  - image: String
 }
 
 class Category {
   - categoryId: int
   - name: String
-  + addProduct(product: Product)
 }
 
 Category "1" o-- "*" Product
 
-' Cart & Orders
+' ==== Shopping Cart & Orders ====
 class ShoppingCart {
   - cartId: int
   - items: List<CartItem>
   + addItem(product: Product, qty: int)
   + removeItem(productId: int)
+  + updateItem(productId: int, qty: int)
   + getTotal(): double
 }
 
@@ -77,27 +85,28 @@ class Order {
   + updateStatus(newStatus: String)
 }
 
-Customer "1" --> "*" Order
+Buyer "1" --> "*" Order
 Order "1" o-- "*" CartItem
 
-' Payment & Shipping
+' ==== Payments & Returns ====
 class Payment {
   - paymentId: int
   - amount: double
   - method: String
   - status: String
   + processPayment()
+  + refund()
 }
 
-class Shipment {
-  - shipmentId: int
-  - carrier: String
-  - trackingNumber: String
+class ReturnRequest {
+  - returnId: int
+  - reason: String
   - status: String
+  + initiateReturn()
   + updateStatus(newStatus: String)
 }
 
 Order "1" --> "1" Payment
-Order "1" --> "1" Shipment
+Order "0..1" --> "*" ReturnRequest
 
 @enduml
