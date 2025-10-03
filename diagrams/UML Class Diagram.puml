@@ -1,6 +1,6 @@
 @startuml DeckedOutClassDiagram
 
-title Decked Out - Class Diagram (Based on SRS)
+title Decked Out - Class Diagram (Based on SRS, with Category Tags)
 
 ' ==== User Hierarchy ====
 class User {
@@ -55,6 +55,10 @@ class Product {
 class Category {
   - categoryId: int
   - name: String
+  - tags: List<String>
+  + addTag(tag: String)
+  + removeTag(tag: String)
+  + getTags(): List<String>
 }
 
 Category "1" o-- "*" Product
