@@ -1,0 +1,9 @@
+@startuml US-31 Activity
+start
+:User navigates to website;
+:System does human verification (e.g., CAPTCHA);
+while () is (Not verified)
+    :Prompt user to complete verification;
+endwhile (User verified)
+stop
+@enduml
