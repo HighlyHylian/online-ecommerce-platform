@@ -1,0 +1,116 @@
+@startuml DeckedOutClassDiagram
+
+title Decked Out - Class Diagram (Based on SRS, with Category Tags)
+
+' ==== User Hierarchy ====
+class User {
+  - userId: int
+  - username: String
+  - email: String
+  - password: String
+  + register()
+  + login()
+  + logout()
+  + updateAccount()
+  + deleteAccount()
+}
+
+class Buyer {
+  + browseProducts()
+  + searchProducts()
+  + addToCart(product: Product, qty: int)
+  + checkout(cart: ShoppingCart): Order
+  + returnProduct(orderId: int)
+  + viewPastOrders(): List<Order>
+}
+
+class Seller {
+  + addProduct(product: Product)
+  + updateProduct(productId: int)
+  + removeProduct(productId: int)
+  + viewProducts(): List<Product>
+}
+
+class Admin {
+  + manageUser(userId: int)
+  + manageSeller(sellerId: int)
+  + manageProducts()
+  + viewAnalytics()
+}
+
+User <|-- Buyer
+User <|-- Seller
+User <|-- Admin
+
+' ==== Product & Categories ====
+class Product {
+  - productId: int
+  - name: String
+  - description: String
+  - price: double
+  - stockQty: int
+  - image: String
+}
+
+class Category {
+  - categoryId: int
+  - name: String
+  - tags: List<String>
+  + addTag(tag: String)
+  + removeTag(tag: String)
+  + getTags(): List<String>
+}
+
+Category "1" o-- "*" Product
+
+' ==== Shopping Cart & Orders ====
+class ShoppingCart {
+  - cartId: int
+  - items: List<CartItem>
+  + addItem(product: Product, qty: int)
+  + removeItem(productId: int)
+  + updateItem(productId: int, qty: int)
+  + getTotal(): double
+}
+
+class CartItem {
+  - product: Product
+  - quantity: int
+}
+
+ShoppingCart "1" o-- "*" CartItem
+CartItem "*" --> "1" Product
+
+class Order {
+  - orderId: int
+  - date: Date
+  - total: double
+  - status: String
+  + updateStatus(newStatus: String)
+}
+
+Buyer "1" --> "*" Order
+Order "1" o-- "*" CartItem
+
+' ==== Payments & Returns ====
+class Payment {
+  - paymentId: int
+  - amount: double
+  - method: String
+  - status: String
+  + processPayment()
+  + refund()
+}
+
+class ReturnRequest {
+  - returnId: int
+  - reason: String
+  - status: String
+  + initiateReturn()
+  + updateStatus(newStatus: String)
+}
+
+Order "1" --> "1" Payment
+Order "0..1" --> "*" ReturnRequest
+
+@enduml

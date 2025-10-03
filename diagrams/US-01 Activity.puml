@@ -5,7 +5,8 @@ start
 repeat
     :Display Account Creation Form;
     :Enter Account Details;
-repeat while () is (Error with Input) not (All Details Valid)
+    :Accept Terms and Conditions;
+repeat while () is (Error with Input or Terms not accepted) not (All Details Valid)
 :Submit Account Details;
 :Display "Success" and Create Account;
 :Send verification email;
