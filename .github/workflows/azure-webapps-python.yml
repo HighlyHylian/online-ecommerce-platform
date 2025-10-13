@@ -36,10 +36,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: django-app
-          path: |
-             django/deckedout/manage.py
-             django/deckedout/requirements.txt
-             django/deckedout/deckedout/   # your Django project folder
+          path: django/deckedout/
   deploy:
     runs-on: ubuntu-latest
     needs: build
