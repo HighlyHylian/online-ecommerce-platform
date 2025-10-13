@@ -17,6 +17,9 @@ def about(request):
 def skateboards(request):
     return render(request, 'main/skateboards.html')
 
+def blog(request):
+    return render(request, 'main/blog.html')
+
 # --- Auth Pages ---
 
 def signup_view(request):

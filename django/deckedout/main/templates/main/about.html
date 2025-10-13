@@ -12,10 +12,9 @@
   <meta name="keywords" content="" />
   <meta name="description" content="" />
   <meta name="author" content="" />
-  <link rel="shortcut icon" href="images/favicon.png" type="">
+  <link rel="shortcut icon" href="{% static 'main/images/favicon.png' %}" type="image/png">
 
   <title> Decked Out </title>
-
 
   <!-- bootstrap core css -->
   <link rel="stylesheet" type="text/css" href="{% static 'main/css/bootstrap.css' %}">
@@ -24,12 +23,12 @@
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
 
   <!-- font awesome style -->
-  <link href="css/font-awesome.min.css" rel="stylesheet" />
+  <link href="{% static 'main/css/font-awesome.min.css' %}" rel="stylesheet" />
 
   <!-- Custom styles for this template -->
-  <link href="css/style.css" rel="stylesheet" />
+  <link href="{% static 'main/css/style.css' %}" rel="stylesheet" />
   <!-- responsive style -->
-  <link href="css/responsive.css" rel="stylesheet" />
+  <link href="{% static 'main/css/responsive.css' %}" rel="stylesheet" />
 
 </head>
 
@@ -37,7 +36,7 @@
 
   <div class="hero_area">
     <div class="hero_bg_box">
-      <img src="images/slider-bg.jpg" alt="">
+      <img src="{% static 'main/images/slider-bg.jpg' %}" alt="">
     </div>
     <!-- header section strats -->
     <header class="header_section">
@@ -62,10 +61,10 @@
                 <a class="nav-link" href="{% url 'about' %}">About</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="skateboards.html">Skateboards</a>
+                <a class="nav-link" href="{% static 'main/skateboards.html' %}">Skateboards</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="blog.html">Blog</a>
+                <a class="nav-link" href="{% static 'main/blog.html' %}">Blog</a>
               </li>
               <form class="form-inline">
                 <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
@@ -95,14 +94,14 @@
             <p>
               We are some students trying to make it 
             </p>
-            <a href="">
+            <a href="{% static 'main/' %}">
               Read More
             </a>
           </div>
         </div>
         <div class="col-md-6 ">
           <div class="img-box">
-            <img src="images/about-img.jpg" alt="">
+            <img src="{% static 'main/images/about-img.jpg' %}" alt="">
           </div>
         </div>
       </div>
@@ -161,16 +160,16 @@
             </a>
           </div>
           <div class="social_box">
-            <a href="">
+            <a href="#">
               <i class="fa fa-facebook" aria-hidden="true"></i>
             </a>
-            <a href="">
+            <a href="#">
               <i class="fa fa-twitter" aria-hidden="true"></i>
             </a>
-            <a href="">
+            <a href="#">
               <i class="fa fa-linkedin" aria-hidden="true"></i>
             </a>
-            <a href="">
+            <a href="#">
               <i class="fa fa-instagram" aria-hidden="true"></i>
             </a>
           </div>
@@ -192,17 +191,17 @@
   <!-- footer section -->
 
   <!-- jQery -->
-  <script src="js/jquery-3.4.1.min.js"></script>
+  <script src="{% static 'main/js/jquery-3.4.1.min.js' %}"></script>
   <!-- popper js -->
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
   </script>
   <!-- bootstrap js -->
-  <script src="js/bootstrap.js"></script>
+  <script src="{% static 'main/js/bootstrap.js' %}"></script>
   <!-- owl slider -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
   </script>
   <!-- custom js -->
-  <script src="js/custom.js"></script>
+  <script src="{% static 'main/js/custom.js' %}"></script>
   <!-- Google Map -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
   </script>
