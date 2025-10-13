@@ -14,14 +14,23 @@
                 <h2>Sign In</h2>
                 <p>Enter your credentials to access your account</p>
             </div>
+
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
             
-            <form class="login-form" id="loginForm" novalidate>
+            <form class="login-form" id="loginForm" method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+
                 <div class="form-group">
                     <div class="input-wrapper">
-                        <input type="userbane" id="username" name="username" required autocomplete="username">
+                        <input type="text" id="username" name="username" required autocomplete="username">
                         <label for="username">Username</label>
                     </div>
-                    <span class="error-message" id="usernameError"></span>
                 </div>
 
                 <div class="form-group">
@@ -32,7 +41,6 @@
                             <span class="eye-icon"></span>
                         </button>
                     </div>
-                    <span class="error-message" id="passwordError"></span>
                 </div>
 
                 <div class="form-options">
@@ -56,19 +64,15 @@
                 <p>Don't have an account? <a href="{% url 'signup' %}">Create one</a></p>
             </div>
             <div class="home-link" style="margin-top: 10px;">
-                 <p>Or go back <a href="{% url 'index' %}">Home</a></p>
+                <p>Or go back <a href="{% url 'index' %}">Home</a></p>
             </div>
 
-
-            <div class="success-message" id="successMessage">
+            <div class="success-message" id="successMessage" style="display: none;">
                 <div class="success-icon">✓</div>
                 <h3>Login Successful!</h3>
                 <p>Redirecting to your dashboard...</p>
             </div>
         </div>
     </div>
-
-    <script src="../../shared/js/form-utils.js"></script>
-    <script src="script.js"></script>
 </body>
 </html>
