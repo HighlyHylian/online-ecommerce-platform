@@ -6,7 +6,7 @@ env:
 
 on:
   push:
-    branches: [ "HighlyHylian-CI-CD" ]
+    branches: [ "HighlyHylian-CI-CD", "main" ]
   workflow_dispatch:
 
 permissions:
