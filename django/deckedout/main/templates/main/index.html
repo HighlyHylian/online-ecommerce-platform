@@ -65,12 +65,12 @@
                 <a class="nav-link" href="{% url 'about' %}">About</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="skateboards.html">Skateboards</a>
+                <a class="nav-link" href="{% url 'skateboards' %}">Skateboards</a>
               </li>
               <li class="nav-item {% if request.path == '/login/' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'login' %}">Login</a>
               <li class="nav-item">
-                <a class="nav-link" href="blog.html">Blog</a>
+                <a class="nav-link" href="{% url 'blog' %}">Blog</a>
               </li>
               <form class="form-inline">
                 <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
