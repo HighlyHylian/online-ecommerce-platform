@@ -136,7 +136,7 @@ STATIC_URL = '/static/'
 # Where collectstatic will copy files for Azure to serve
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_STORAAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Optional: tell Django to also look in your app's static folder
 STATICFILES_DIRS = [
