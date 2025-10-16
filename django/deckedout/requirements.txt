@@ -8,6 +8,7 @@ debugpy
 decorator
 Django
 django-mssql-backend
+dotenv
 executing
 fonttools
 gunicorn
