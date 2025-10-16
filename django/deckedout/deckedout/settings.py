@@ -25,6 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# Guess what wasn't kept secret? This key is only for development and should NOT public in actual production environments.
 SECRET_KEY = 'django-insecure-5li)kk*7-y=^*z_cb_(ku9vi(!$)axsfctyfg6p^9w6z9c_bc5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -33,6 +34,10 @@ DEBUG = True
 
 
 ALLOWED_HOSTS = ['deckedoutshop-f6bnemgkejhadnc4.canadacentral-01.azurewebsites.net', 'localhost', '127.0.0.1']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://deckedoutshop-f6bnemgkejhadnc4.canadacentral-01.azurewebsites.net'
+]
 
 
 # Application definition
