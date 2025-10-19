@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+</head>
+<body>
+    <h1>Add a New Product</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit for Approval</button>
+    </form>
+    <a href="{% url 'seller_dashboard' %}">Back to Dashboard</a>
+</body>
+</html>

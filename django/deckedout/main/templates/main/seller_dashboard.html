@@ -3,10 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Seller Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        a { text-decoration: none; color: #007BFF; margin-right: 10px; }
+        a:hover { text-decoration: underline; }
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .product-card img {
+            max-width: 150px;
+            display: block;
+            margin-top: 10px;
+        }
+        .product-status {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome, {{ user.username }} (Seller)</h1>
     <p>Here you can manage your products, orders, and store info.</p>
+    <a href="{% url 'add_product' %}">Add New Product</a> |
     <a href="{% url 'logout' %}">Logout</a>
+
+    <h2>Your Products</h2>
+
+    {% if products %}
+        {% for product in products %}
+            <div class="product-card">
+                <h3>{{ product.name }}</h3>
+                <p><strong>Price:</strong> ${{ product.price }}</p>
+                <p><strong>Description:</strong> {{ product.description }}</p>
+                
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% endif %}
+                
+                <p class="product-status">
+                    <strong>Status:</strong>
+                    {% if product.is_approved %}
+                        Approved
+                    {% else %}
+                        Pending Approval
+                    {% endif %}
+                </p>
+
+                <a href="{% url 'edit_product' product.product_id %}">Edit</a>
+
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>You haven't added any products yet.</p>
+    {% endif %}
 </body>
 </html>
