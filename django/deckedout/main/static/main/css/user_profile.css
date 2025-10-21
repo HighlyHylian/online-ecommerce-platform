@@ -1,44 +1,157 @@
+/* General Page Styling */
 body {
-    background: rgb(99, 39, 120)
+    background-color: #f2f6fc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Main Container */
+.container {
+    max-width: 950px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* Profile Section */
+.border-right {
+    border-right: 1px solid #e0e0e0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.rounded-circle {
+    border-radius: 50%;
+    border: 3px solid #007bff;
+    transition: transform 0.3s ease;
+}
+
+.rounded-circle:hover {
+    transform: scale(1.05);
+}
+
+/* Username + Logged In text */
+.font-weight-bold {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-top: 15px;
+}
+
+.text-black-50 {
+    color: #6c757d !important;
+}
+
+/* Profile Settings */
+h4.text-right {
+    font-weight: 700;
+    color: #007bff;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+}
+
+/* Input Fields */
+.form-control {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    transition: all 0.2s ease-in-out;
 }
 
 .form-control:focus {
-    box-shadow: none;
-    border-color: #BA68C8
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    outline: none;
 }
 
-.profile-button {
-    background: rgb(99, 39, 120);
-    box-shadow: none;
-    border: none
-}
-
-.profile-button:hover {
-    background: #682773
-}
-
-.profile-button:focus {
-    background: #682773;
-    box-shadow: none
-}
-
-.profile-button:active {
-    background: #682773;
-    box-shadow: none
-}
-
-.back:hover {
-    color: #682773;
-    cursor: pointer
-}
-
+/* Labels */
 .labels {
-    font-size: 11px
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Logout Button */
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+    font-size: 0.9rem;
+    padding: 8px 14px;
+    margin-top: 10px;
+    border-radius: 8px;
+}
+
+.btn-danger:hover {
+    background-color: #b02a37;
+}
+
+/* Experience Section */
+.experience {
+    font-weight: 600;
+    color: #007bff;
+}
+
+.add-experience {
+    cursor: pointer;
+    font-weight: 500;
+    color: #007bff;
+    background-color: #eaf2ff;
+    border-radius: 6px;
+    transition: all 0.2s ease;
 }
 
 .add-experience:hover {
-    background: #BA68C8;
-    color: #fff;
-    cursor: pointer;
-    border: solid 1px #BA68C8
+    background-color: #007bff;
+    color: white;
+}
+
+/* Save Button */
+.profile-button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.profile-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        margin: 20px;
+        padding: 15px;
+    }
+    .border-right {
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 20px;
+    }
 }

@@ -5,6 +5,10 @@ from .models import CustomUser
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from .models import Product
+
+from .forms import ProductForm
+
 
 # --- Basic Pages ---
 
@@ -15,8 +19,8 @@ def about(request):
     return render(request, 'main/about.html')
 
 def skateboards(request):
-    return render(request, 'main/skateboards.html')
-
+    products = Product.objects.filter(is_approved=True)
+    return render(request, 'main/skateboards.html', {'products': products})
 def blog(request):
     return render(request, 'main/blog.html')
 
@@ -103,8 +107,12 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def seller_dashboard(request):
-    return render(request, 'main/seller_dashboard.html')
-
+    # Get only products added by the logged-in seller
+    seller_products = Product.objects.filter(seller=request.user)
+    
+    return render(request, 'main/seller_dashboard.html', {
+        'products': seller_products
+    })
 
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
@@ -117,3 +125,89 @@ def is_superuser(user):
 def admin_dashboard(request):
     users = CustomUser.objects.all()
     return render(request, 'main/admin_dashboard.html', {'users': users})
+
+
+
+
+
+from django.contrib.admin.views.decorators import staff_member_required
+
+@staff_member_required
+def approve_products(request):
+    products = Product.objects.filter(is_approved=False)
+    if request.method == 'POST':
+        product_id = request.POST.get('product_id')
+        product = Product.objects.get(pk=product_id)
+        product.is_approved = True
+        product.is_edited = True
+        product.save()
+    return render(request, 'admin_approve.html', {'products': products})
+
+@login_required
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.seller = request.user
+            product.save()
+            messages.success(request, "Product submitted for admin approval!")
+            return redirect('seller_dashboard')
+    else:
+        form = ProductForm()
+    return render(request, 'main/add_product.html', {'form': form})
+
+
+    
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required, user_passes_test
+from .models import Product
+
+
+# Restrict to admin/superuser only
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def admin_approve(request):
+    # Get all products waiting for approval
+    products = Product.objects.filter(is_approved=False)
+
+    if request.method == "POST":
+        product_id = request.POST.get("product_id")
+        product = Product.objects.get(product_id=product_id)
+        product.is_approved = True
+        product.save()
+        return redirect('admin_approve')
+
+    return render(request, 'main/admin_approve.html', {'products': products})
+
+
+
+from django.shortcuts import get_object_or_404
+
+@login_required
+def seller_products(request):
+    # Get only the products belonging to the logged-in seller
+    products = Product.objects.filter(seller=request.user)
+    return render(request, 'main/seller_products.html', {'products': products})
+
+
+from django.shortcuts import get_object_or_404
+
+@login_required
+def edit_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id, seller=request.user)
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            edited_product = form.save(commit=False)
+            edited_product.is_approved = False  # need re-approval
+            edited_product.is_edited = True
+            edited_product.save()
+            messages.success(request, "Product updated! Waiting for admin approval.")
+            return redirect('seller_dashboard')
+    else:
+        form = ProductForm(instance=product)
+
+    return render(request, 'main/edit_product.html', {'form': form})

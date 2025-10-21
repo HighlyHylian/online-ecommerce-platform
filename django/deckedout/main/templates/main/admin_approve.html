@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Approvals</title>
+    <link rel="stylesheet" href="{% static 'main/css/admin_dashboard.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
+            margin: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 300px;
+            padding: 20px;
+        }
+
+        .product-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .product-card p {
+            color: #555;
+            font-size: 14px;
+        }
+
+        .approve-form {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .approve-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .approve-btn:hover {
+            background-color: #45a049;
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            text-decoration: none;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pending Product Approvals</h1>
+
+    {% if products %}
+        <div class="product-container">
+            {% for product in products %}
+                <div class="product-card">
+                    <h3>{{ product.name }}</h3>
+                    <p><strong>Price:</strong> ${{ product.price }}</p>
+                    <p><strong>Description:</strong> {{ product.description }}</p>
+                    <p><strong>Seller:</strong> {{ product.seller.username }}</p>
+                    <form method="POST" class="approve-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.product_id }}">
+                        <button type="submit" class="approve-btn">Approve</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="text-align: center; color: #777;">No pending products for approval.</p>
+    {% endif %}
+
+
+    {% if product.is_edited %}
+         <span style="color: orange; font-weight: bold;">Edited - pending approval</span>
+    {% endif %}
+
+
+    <a href="{% url 'admin_dashboard' %}" class="back-btn">Back to Admin Dashboard</a>
+</body>
+</html>

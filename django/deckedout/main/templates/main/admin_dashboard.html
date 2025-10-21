@@ -18,6 +18,9 @@
         </header>
 
         <section class="dashboard-content">
+            <div class="dashboard-actions">
+                <a href="{% url 'admin_approve' %}" class="approve-btn">Approve Seller Products</a>
+            </div>
             <h2>Registered Users</h2>
             <table>
                 <thead>
@@ -35,7 +38,9 @@
                             <td>{{ user.username }}</td>
                             <td>{{ user.email }}</td>
                             <td>
-                                {% if user.role == "seller" %}
+                                {% if user.is_superuser %}
+                                    <span class="role admin">Admin</span>
+                                {% elif user.role == "seller" %}
                                     <span class="role seller">Seller</span>
                                 {% elif user.role == "buyer" %}
                                     <span class="role buyer">Buyer</span>
