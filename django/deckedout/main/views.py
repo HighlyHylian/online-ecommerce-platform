@@ -6,6 +6,7 @@ from .models import CustomUser
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import Product
+from django.db.models import Q
 
 from .forms import ProductForm
 
@@ -214,32 +215,21 @@ def edit_product(request, product_id):
 
 
 
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Order, OrderItem, Product 
+#----------product search functionality-----------
 
-@login_required
-def seller_orders(request):
 
-    if request.user.role != 'seller':
-        messages.error(request, "You do not have permission to view this page.")
-        return redirect('home')
-     
-    seller_products = Product.objects.filter(seller = request.user)
-    if not seller_products.exists():
-        orders = Order.objects.none()
-    else:
-     order_ids = OrderItem.objects.filter(product__in = seller_products).values_list('order__ID', flat=True).distinct()
-     orders = Order.objects.filter(ID__in=order_ids).order_by('-created_at')
+def product_search(request):
+    query = request.GET.get('q', '')
+    results = []
 
-    
-    #orders = orders.prefetch_related(
-    # Prefetch('items', queryset= OrderItem.objects.filter(product__in=seller_products))     
-    #)
+    if query:
+        results = Product.objects.filter(
+            Q(name__icontains=query) | 
+            Q(description__icontains=query)
+        )
 
-    context  = {
-        'orders' : orders
+    context = {
+        'query': query,
+        'results': results,
     }
-
-    return render(request, 'main/seller_orders.html', context)
-
+    return render(request, 'main/search_results.html', context)

@@ -46,7 +46,23 @@
     <div class="container">
       <div class="heading_container heading_center">
         <h2>Available Skateboards</h2>
-      </div>
+        <!-- Search Form -->
+        <form method="GET" action="{% url 'product_search' %}" class="search-form mt-3" style="text-align:center;">
+          <input 
+            type="text" 
+            name="q" 
+            placeholder="Search for skateboards..." 
+            value="{{ request.GET.q }}" 
+            style="padding:8px; width:250px; border-radius:5px; border:1px solid #ccc;">
+          <button 
+            type="submit" 
+            style="padding:8px 15px; border:none; border-radius:5px; background-color:#ff4c4c; color:white; cursor:pointer;">
+            Search
+            </button>
+          </form>
+         </div>
+
+
 
       {% if products %}
       <div class="product_container">
