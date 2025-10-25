@@ -242,3 +242,4 @@ def seller_orders(request):
     }
 
     return render(request, 'main/seller_orders.html', context)
+
