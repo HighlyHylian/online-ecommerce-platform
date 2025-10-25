@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Orders </title>
+    </head>
+    <body>
+
+     {% block content %}
+        <div id= "maincontentWrapper">
+            <h1> Orders </h1>
+            
+            {% if orders %}
+        <table class="table">
+        <thead>
+            <tr>
+                <th> Order ID </th>
+                <th> Customer </th>
+                <th> Date </th>
+                <th> Items </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td> {{order.id}} </td>
+                <td> {{order.buyer_id}} </td>
+                <td> {{order.created_at|date:"M d, Y"}} </td>
+                <td> {{order.amountDue}} </td>
+                <td> 
+                    <ul>
+                        {% for item in order.items.all %}
+                        <li>
+                            <strong> Product Name: </strong>  {{item.product.name}}  <br> 
+                            <p><strong> Description: </strong> {{item.product.description}} </p>
+                            <p><strong> Price: </strong> {{item.pricepurchased}} </p>
+                            <p><strong> Quantity:</strong> {{item.quantity}} </p>
+                        </li>
+                                {% endfor %}  
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p> You have not received any orders yet. </p>
+    {% endif %}    
+            </div>
+            {% endblock %}
+    </body>
+    </html>
+
+
+
