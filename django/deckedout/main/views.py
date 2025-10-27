@@ -211,3 +211,35 @@ def edit_product(request, product_id):
         form = ProductForm(instance=product)
 
     return render(request, 'main/edit_product.html', {'form': form})
+
+
+
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Order, OrderItem, Product 
+
+@login_required
+def seller_orders(request):
+
+    if request.user.role != 'seller':
+        messages.error(request, "You do not have permission to view this page.")
+        return redirect('home')
+     
+    seller_products = Product.objects.filter(seller = request.user)
+    if not seller_products.exists():
+        orders = Order.objects.none()
+    else:
+     order_ids = OrderItem.objects.filter(product__in = seller_products).values_list('order__ID', flat=True).distinct()
+     orders = Order.objects.filter(ID__in=order_ids).order_by('-created_at')
+
+    
+    #orders = orders.prefetch_related(
+    # Prefetch('items', queryset= OrderItem.objects.filter(product__in=seller_products))     
+    #)
+
+    context  = {
+        'orders' : orders
+    }
+
+    return render(request, 'main/seller_orders.html', context)
+
