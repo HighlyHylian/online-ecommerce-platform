@@ -60,8 +60,8 @@ ALLOWED_HOSTS = [
     'deckedoutshop-f6bnemgkejhadnc4.canadacentral-01.azurewebsites.net',
     'localhost',
     '127.0.0.1',
-    '169.254.130.2'
-
+    '169.254.130.2',
+    '169.254.130.2:8000',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
