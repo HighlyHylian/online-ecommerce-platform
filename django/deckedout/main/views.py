@@ -68,6 +68,10 @@ def signup_view(request):
 
     return render(request, 'main/login.html')'''
 
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.shortcuts import render, redirect
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')  # or email if you use email login
@@ -75,6 +79,10 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
+            if user.banned:  # 🔹 Block banned users
+                messages.error(request, 'Your account has been banned. Please contact support.')
+                return redirect('login')
+
             login(request, user)
 
             # 🔹 Redirect based on user type
@@ -90,6 +98,7 @@ def login_view(request):
             return redirect('login')
 
     return render(request, 'main/login.html')
+
 
 
 
