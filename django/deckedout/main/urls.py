@@ -25,6 +25,8 @@ urlpatterns = [
     path('seller/update-quantity/<int:product_id>/', views.update_quantity, name='update_quantity'),
     path('search/', views.product_search, name='product_search'),
 
+
+
     
 
 
