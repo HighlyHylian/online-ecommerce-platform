@@ -24,8 +24,7 @@ urlpatterns = [
     path('seller/products/', views.seller_products, name='seller_products'),
     path('seller/products/edit/<int:product_id>/', views.edit_product, name='edit_product'),
     path('search/', views.product_search, name='product_search'),
-
-    
+    path('seller/payout/', views.seller_payout, name='seller_payout'), 
 
 
     

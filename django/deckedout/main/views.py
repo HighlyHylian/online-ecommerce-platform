@@ -233,3 +233,23 @@ def product_search(request):
         'results': results,
     }
     return render(request, 'main/search_results.html', context)
+
+
+
+from django.db.models import Sum
+from .models import Order, OrderItem
+from django.contrib.auth.decorators import login_required
+from decimal import Decimal
+
+@login_required
+def seller_payout(request):
+
+    totalPayout_data = Order.objects.filter(seller=request.user).aggregate(totalPayout=Sum('orderitem__pricePurchased'))
+    totalPayout = totalPayout_data['totalPayout'] if totalPayout_data['totalPayout'] is not None else Decimal('0.00')
+
+    context = {
+        'totalPayout': totalPayout,
+        'seller_name': request.user.username,
+    }
+
+    return render(request, 'main/seller_payout.html', context)
