@@ -451,3 +451,79 @@ def buyer_orders(request):
     return render(request, 'main/buyer_orders.html', {'orders': orders})
 
     return render(request, 'main/cart_view.html', {'cart_items': cart_items, 'total': total})
+
+from django.db.models import Sum, F
+
+@login_required
+def seller_payout(request):
+    if request.user.role != 'seller':
+        messages.error(request, "You are not authorized to access this page.")
+        return redirect('home')
+
+    balance, _ = SellerBalance.objects.get_or_create(seller=request.user)
+
+    if request.method == 'POST':
+        claimed_amount = balance.site_balance
+        balance.site_balance = Decimal('0.00')
+        balance.save()
+        messages.success(request, f"You have claimed ${claimed_amount}!")
+
+    return render(request, 'main/seller_payout.html', {'balance': balance})
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .models import OrderItem, RefundRequest
+
+@login_required
+def request_refund(request, order_item_id):
+    order_item = get_object_or_404(OrderItem, id=order_item_id, order__buyer=request.user)
+
+    # Check if a refund request already exists
+    if RefundRequest.objects.filter(order_item=order_item).exists():
+        messages.warning(request, "Refund request already submitted for this item.")
+        return redirect('buyer_orders')
+
+    if request.method == 'POST':
+        reason = request.POST.get('reason', '').strip()
+        if not reason:
+            messages.error(request, "Please provide a reason for the refund.")
+            return render(request, 'main/request_refund.html', {'order_item': order_item})
+        
+        RefundRequest.objects.create(
+            order_item=order_item,
+            buyer=request.user,
+            reason=reason
+        )
+        messages.success(request, "Refund request submitted successfully!")
+        return redirect('buyer_orders')
+
+    return render(request, 'main/request_refund.html', {'order_item': order_item})
+
+
+
+@login_required
+def handle_refund(request, item_id, action):
+    item = get_object_or_404(OrderItem, id=item_id, product__seller=request.user)
+
+    if item.refund_status == 'requested':
+        if action == 'approve':
+            item.refund_status = 'approved'
+            # You can also adjust seller.site_balance -= item.subtotal() here
+            item.save()
+            messages.success(request, f"Refund approved for {item.product.name}.")
+        elif action == 'deny':
+            item.refund_status = 'denied'
+            item.save()
+            messages.warning(request, f"Refund denied for {item.product.name}.")
+    else:
+        messages.info(request, f"Refund for {item.product.name} already {item.refund_status}.")
+
+    return redirect('main/seller_refunds')
+
+
+@login_required
+def seller_refunds(request):
+    refund_requests = OrderItem.objects.filter(product__seller=request.user, refund_status='requested')
+    return render(request, 'main/seller_refunds.html', {'refund_requests': refund_requests})

@@ -1,0 +1,16 @@
+<h2>Request Refund for {{ order_item.product.name }}</h2>
+
+
+
+<form method="POST">
+  {% csrf_token %}
+  <label for="reason">Reason for refund:</label><br>
+  <textarea id="reason" name="reason" rows="5" cols="50" required></textarea><br><br>
+  <button type="submit">Submit Refund Request</button>
+</form>
+
+<a href="{% url 'buyer_orders' %}">Back to Orders</a>
+
+{% for message in messages %}
+<p>{{ message }}</p>
+{% endfor %}
