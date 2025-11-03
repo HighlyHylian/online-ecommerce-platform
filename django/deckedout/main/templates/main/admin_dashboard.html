@@ -54,11 +54,12 @@
                                 {% if not user.is_superuser %}
                                     <form action="{% url 'toggle_ban' user.id %}" method="post" style="display:inline;">
                                         {% csrf_token %}
-                                        {% if user.is_active %}
+                                        {% if not user.banned %}
                                             <button type="submit" class="ban-btn" onclick="return confirm('Ban this user?')">Ban</button>
                                         {% else %}
                                             <button type="submit" class="unban-btn" onclick="return confirm('Unban this user?')">Unban</button>
                                         {% endif %}
+
                                     </form>
                                 {% else %}
                                     <em>—</em>
