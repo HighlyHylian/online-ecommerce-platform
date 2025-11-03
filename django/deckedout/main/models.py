@@ -13,7 +13,7 @@ class CustomUser(AbstractUser):
     )
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='buyer')
     
-    banned = models.BooleanField(default=False)
+    banned = models.BooleanField(default=True)
 
     def __str__(self):
         return self.username
