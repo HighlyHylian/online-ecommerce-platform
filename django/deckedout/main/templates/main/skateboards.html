@@ -19,6 +19,8 @@
     <div class="hero_bg_box">
       <img src="{% static 'main/images/slider-bg.jpg' %}" alt="">
     </div>
+
+    <!-- Header Section -->
     <header class="header_section">
       <div class="container">
         <nav class="navbar navbar-expand-lg custom_nav-container ">
@@ -26,11 +28,41 @@
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
             <span class=""> </span>
           </button>
+
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav w-100">
               <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
               <li class="nav-item active"><a class="nav-link" href="{% url 'skateboards' %}">Skateboards</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'blog' %}">Blog</a></li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'cart_view' %}" style="position: relative;">
+                  <i class="fa fa-shopping-cart" style="font-size:20px;"></i>
+                  {% if cart_item_count > 0 %}
+                    <span 
+                      style="position:absolute; top:0; right:-10px; background-color:red; color:white; 
+                            font-size:12px; border-radius:50%; padding:2px 6px;">
+                      {{ cart_item_count }}
+                    </span>
+                  {% endif %}
+                </a>
+              </li>
+
+
+              {% if user.is_authenticated %}
+                <li class="nav-item dropdown ml-auto">
+                  <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                     aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-user"></i> {{ user.username }}
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                  </div>
+                </li>
+              {% else %}
+                <li class="nav-item ml-auto {% if request.path == '/login/' %}active{% endif %}">
+                  <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+              {% endif %}
             </ul>
           </div>
         </nav>
@@ -38,7 +70,7 @@
     </header>
   </div>
 
-  <!-- product section -->
+  <!-- Product Section -->
   <section class="product_section">
     <div class="product_bg">
       <img src="{% static 'main/images/product-bg.png' %}" alt="">
@@ -46,6 +78,7 @@
     <div class="container">
       <div class="heading_container heading_center">
         <h2>Available Skateboards</h2>
+
         <!-- Search Form -->
         <form method="GET" action="{% url 'product_search' %}" class="search-form mt-3" style="text-align:center;">
           <input 
@@ -58,11 +91,9 @@
             type="submit" 
             style="padding:8px 15px; border:none; border-radius:5px; background-color:#ff4c4c; color:white; cursor:pointer;">
             Search
-            </button>
-          </form>
-         </div>
-
-
+          </button>
+        </form>
+      </div>
 
       {% if products %}
       <div class="product_container">
@@ -79,11 +110,17 @@
               </div>
               <div class="detail-box">
                 <h4>{{ product.name }}</h4>
-                <h6 class="price">
-                  <span class="new_price">${{ product.price }}</span>
-                </h6>
+                <h6 class="price"><span class="new_price">${{ product.price }}</span></h6>
                 <p>{{ product.description }}</p>
-                <a href="#">Buy Now</a>
+
+                <!-- Buy Now Button -->
+                <form method="POST" action="{% url 'add_to_cart' product.product_id %}">
+                  {% csrf_token %}
+                  <label for="quantity">Quantity:</label>
+                  <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock }}" style="width:60px; text-align:center;">
+                  <button type="submit" class="btn btn-danger mt-2">Buy Now</button>
+                </form>
+
               </div>
             </div>
           </div>
@@ -96,7 +133,7 @@
     </div>
   </section>
 
-  <!-- info section -->
+  <!-- Info Section -->
   <section class="info_section">
     <div class="container">
       <div class="row info_main_row">
@@ -133,7 +170,9 @@
 
   <footer class="footer_section">
     <div class="container">
-      <p>&copy; <span id="displayYear"></span> All Rights Reserved By <a href="https://html.design/">Free Html Templates</a></p>
+      <p>&copy; <span id="displayYear"></span> All Rights Reserved By 
+        <a href="https://html.design/">Free Html Templates</a>
+      </p>
     </div>
   </footer>
 

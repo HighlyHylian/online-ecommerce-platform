@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Orders</title>
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+</head>
+<body>
+    <div style="max-width: 900px; margin: 50px auto; background: #fff; padding: 30px; border-radius: 10px;">
+        <h2 style="text-align: center;">📦 Your Order History</h2>
+
+        {% if orders %}
+            {% for order in orders %}
+                <div style="border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                    <h3>Order #{{ order.id }} - {{ order.created_at|date:"M d, Y H:i" }}</h3>
+                    <p><strong>Total Amount:</strong> ${{ order.amountDue }}</p>
+
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                        <thead>
+                            <tr style="background-color: #007bff; color: white;">
+                                <th style="padding: 10px; text-align:left;">Product</th>
+                                <th style="padding: 10px; text-align:center;">Quantity</th>
+                                <th style="padding: 10px; text-align:center;">Price</th>
+                                <th style="padding: 10px; text-align:center;">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.items.all %}
+                                <tr style="border-bottom:1px solid #ddd;">
+                                    <td style="padding:10px;">{{ item.product.name }}</td>
+                                    <td style="padding:10px; text-align:center;">{{ item.quantity }}</td>
+                                    <td style="padding:10px; text-align:center;">${{ item.pricePurchased }}</td>
+                                    <td style="padding:10px; text-align:center;">${{ item.subtotal }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="text-align: center; font-size:18px; color:#666;">You have no orders yet.</p>
+        {% endif %}
+
+        <div style="text-align:center; margin-top:20px;">
+            <a href="{% url 'home' %}" style="text-decoration:none; color:#007bff;">← Continue Shopping</a>
+        </div>
+    </div>
+</body>
+</html>

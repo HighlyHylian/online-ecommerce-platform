@@ -37,27 +37,30 @@
 
     {% if products %}
         {% for product in products %}
-            <div class="product-card">
-                <h3>{{ product.name }}</h3>
-                <p><strong>Price:</strong> ${{ product.price }}</p>
-                <p><strong>Description:</strong> {{ product.description }}</p>
-                
-                {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <div class="product-card">
+            <h3>{{ product.name }}</h3>
+            <p><strong>Price:</strong> ${{ product.price }}</p>
+            <p><strong>Description:</strong> {{ product.description }}</p>
+            <p><strong>Stock:</strong> {{ product.stock }}</p>
+
+
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% endif %}
+
+ 
+
+            <p class="product-status">
+                <strong>Status:</strong>
+                {% if product.is_approved %}
+                    Approved
+                {% else %}
+                    Pending Approval
                 {% endif %}
-                
-                <p class="product-status">
-                    <strong>Status:</strong>
-                    {% if product.is_approved %}
-                        Approved
-                    {% else %}
-                        Pending Approval
-                    {% endif %}
-                </p>
+            </p>
 
-                <a href="{% url 'edit_product' product.product_id %}">Edit</a>
-
-            </div>
+            <a href="{% url 'edit_product' product.product_id %}">Edit</a>
+        </div>
         {% endfor %}
     {% else %}
         <p>You haven't added any products yet.</p>
