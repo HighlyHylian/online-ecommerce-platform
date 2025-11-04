@@ -20,8 +20,22 @@ urlpatterns = [
     path('admin/approve-products/', views.approve_products, name='approve_products'),
     path('admin-approve/', views.admin_approve, name='admin_approve'),
     path('seller/products/', views.seller_products, name='seller_products'),
-    path('seller/products/edit/<int:product_id>/', views.edit_product, name='edit_product'),
+    path('seller/update-quantity/<int:product_id>/', views.update_quantity, name='update_quantity'),
+    path('search/', views.product_search, name='product_search'),
+    path('cart/', views.cart_view, name='cart_view'),
+    path('cart/add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+    path('add-to-cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+
+    path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('orders/', views.buyer_orders, name='buyer_orders'),
     path('seller/orders/', views.seller_orders, name='seller_orders'),
+    path('seller/edit-product/<int:product_id>/', views.edit_product, name='edit_product'),
+    path('seller/payout/', views.seller_payout, name='seller_payout'),
+    path('refund/<int:order_item_id>/', views.request_refund, name='request_refund'),
+    path('refund/handle/<int:item_id>/<str:action>/', views.handle_refund, name='handle_refund'),
+    path('seller/refunds/', views.seller_refunds, name='seller_refunds'),
+    path('seller/products/edit/<int:product_id>/', views.edit_product, name='edit_product'),
     path('toggle-ban/<int:user_id>/', views.toggle_ban, name='toggle_ban'),
 ]
 

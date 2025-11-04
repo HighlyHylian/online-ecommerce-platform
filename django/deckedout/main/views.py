@@ -6,6 +6,9 @@ from .models import CustomUser
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import Product
+from django.db.models import Q
+
+from .models import Product, Order, OrderItem, SellerBalance
 
 from .forms import ProductForm
 
@@ -231,34 +234,315 @@ def edit_product(request, product_id):
 
     return render(request, 'main/edit_product.html', {'form': form})
 
-
-
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Order, OrderItem, Product 
+
+@login_required
+def update_quantity(request, product_id):
+    product = get_object_or_404(Product, pk=product_id, seller=request.user)
+
+    if request.method == "POST":
+        try:
+            new_quantity = int(request.POST.get("quantity", product.quantity))
+            if new_quantity < 0:
+                messages.error(request, "Quantity cannot be negative.")
+            else:
+                product.quantity = new_quantity
+                product.save()
+                messages.success(request, f"Quantity for {product.name} updated!")
+        except ValueError:
+            messages.error(request, "Invalid quantity entered.")
+
+    return redirect('seller_dashboard')
+
+
+#----------product search functionality-----------
+
+
+def product_search(request):
+    query = request.GET.get('q', '')
+    results = []
+
+    if query:
+        results = Product.objects.filter(
+            Q(name__icontains=query) | 
+            Q(description__icontains=query)
+        )
+
+    context = {
+        'query': query,
+        'results': results,
+    }
+    return render(request, 'main/search_results.html', context)
+
+from decimal import Decimal
+@login_required
+def checkout(request):
+    cart = request.session.get('cart', {})  # Example: {'1': 2, '3': 1}
+    if not cart:
+        messages.error(request, "Your cart is empty.")
+        return redirect('cart')
+
+    order = Order.objects.create(buyer=request.user)
+    total_price = Decimal('0.00')
+
+    for product_id, quantity in cart.items():
+        product = Product.objects.get(id=product_id)
+
+        # Prevent overselling
+        if product.stock < quantity:
+            messages.error(request, f"Not enough stock for {product.name}.")
+            order.delete()
+            return redirect('cart')
+
+        # Create order item
+        order_item = OrderItem.objects.create(
+            order=order,
+            product=product,
+            quantity=quantity,
+            price=product.price
+        )
+
+        # Update totals
+        total_price += product.price * quantity
+
+        # Decrease stock
+        product.stock -= quantity
+        product.save()
+
+        # Update seller's site balance
+        seller_balance, _ = SellerBalance.objects.get_or_create(seller=product.seller)
+        seller_balance.site_balance += product.price * quantity
+        seller_balance.save()
+
+    order.total_price = total_price
+    order.save()
+
+    # Clear the cart
+    request.session['cart'] = {}
+
+    messages.success(request, "Order placed successfully!")
+    return redirect('buyer_orders')
+
 
 @login_required
 def seller_orders(request):
-
     if request.user.role != 'seller':
-        messages.error(request, "You do not have permission to view this page.")
+        # optional: redirect non-sellers
         return redirect('home')
-     
-    seller_products = Product.objects.filter(seller = request.user)
-    if not seller_products.exists():
-        orders = Order.objects.none()
-    else:
-     order_ids = OrderItem.objects.filter(product__in = seller_products).values_list('order__ID', flat=True).distinct()
-     orders = Order.objects.filter(ID__in=order_ids).order_by('-created_at')
 
-    
-    #orders = orders.prefetch_related(
-    # Prefetch('items', queryset= OrderItem.objects.filter(product__in=seller_products))     
-    #)
+    # Get all OrderItems for products belonging to this seller
+    order_items = OrderItem.objects.filter(product__seller=request.user)
 
-    context  = {
-        'orders' : orders
+    # Get unique orders from those order items
+    orders = Order.objects.filter(items__in=order_items).distinct()
+
+    context = {
+        'orders': orders,
     }
-
     return render(request, 'main/seller_orders.html', context)
 
+
+
+
+
+@login_required
+def claim_balance(request):
+    balance, _ = SellerBalance.objects.get_or_create(seller=request.user)
+
+    if request.method == 'POST':
+        balance.site_balance = Decimal('0.00')
+        balance.save()
+        messages.success(request, "Balance claimed successfully!")
+
+    return render(request, 'main/claim_balance.html', {'balance': balance})
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import Product, Cart, CartItem, Order, OrderItem, SellerBalance
+@login_required
+def add_to_cart(request, product_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    product = get_object_or_404(Product, pk=product_id)
+    quantity = int(request.POST.get('quantity', 1))
+
+    # Get or create cart for this user
+    cart, created = Cart.objects.get_or_create(buyer=request.user)
+
+    # Check if the product already exists in cart
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    if not created:
+        cart_item.quantity += quantity
+    else:
+        cart_item.quantity = quantity
+    cart_item.save()
+
+    return redirect(request.META.get('HTTP_REFERER', 'skateboards'))
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Cart, CartItem, Product
+@login_required
+def cart_view(request):
+    if request.user.is_authenticated:
+        # Get or create a cart for the user
+        cart, created = Cart.objects.get_or_create(buyer=request.user)
+        cart_items = cart.items.all()  # all CartItem objects related to this cart
+
+        total_price = sum(item.subtotal() for item in cart_items)
+    else:
+        cart_items = []
+        total_price = 0
+
+    context = {
+        'cart_items': cart_items,
+        'total_price': total_price,
+    }
+    return render(request, 'main/cart_view.html', context)
+
+
+
+@login_required
+def remove_from_cart(request, item_id):
+    item = get_object_or_404(CartItem, pk=item_id, cart__buyer=request.user)
+    item.delete()
+    messages.info(request, "Item removed from cart.")
+    return redirect('cart_view')
+
+
+
+
+
+
+@login_required
+def checkout(request):
+    cart = get_object_or_404(Cart, buyer=request.user)
+
+    if not cart.items.exists():
+        messages.warning(request, "Your cart is empty.")
+        return redirect('cart_view')
+
+    # Create Order
+    total = cart.total_price()
+    order = Order.objects.create(buyer=request.user, amountDue=total)
+
+    for item in cart.items.all():
+        product = item.product
+        if item.quantity > product.stock:
+            messages.error(request, f"Not enough stock for {product.name}.")
+            return redirect('cart_view')
+
+        # Reduce stock
+        product.stock -= item.quantity
+        product.save()
+
+        # Create order item
+        OrderItem.objects.create(
+            order=order,
+            product=product,
+            quantity=item.quantity,
+            pricePurchased=product.price
+        )
+
+        # Update seller balance
+        balance, _ = SellerBalance.objects.get_or_create(seller=product.seller)
+        balance.site_balance += product.price * item.quantity
+        balance.save()
+
+    # Clear cart
+    cart.items.all().delete()
+
+    messages.success(request, "Order placed successfully!")
+    return redirect('buyer_orders')  # or any confirmation page
+
+
+
+@login_required
+def buyer_orders(request):
+    orders = request.user.orders_as_buyer.all().order_by('-created_at')  # newest first
+    return render(request, 'main/buyer_orders.html', {'orders': orders})
+
+    return render(request, 'main/cart_view.html', {'cart_items': cart_items, 'total': total})
+
+from django.db.models import Sum, F
+
+@login_required
+def seller_payout(request):
+    if request.user.role != 'seller':
+        messages.error(request, "You are not authorized to access this page.")
+        return redirect('home')
+
+    balance, _ = SellerBalance.objects.get_or_create(seller=request.user)
+
+    if request.method == 'POST':
+        claimed_amount = balance.site_balance
+        balance.site_balance = Decimal('0.00')
+        balance.save()
+        messages.success(request, f"You have claimed ${claimed_amount}!")
+
+    return render(request, 'main/seller_payout.html', {'balance': balance})
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .models import OrderItem, RefundRequest
+
+@login_required
+def request_refund(request, order_item_id):
+    order_item = get_object_or_404(OrderItem, id=order_item_id, order__buyer=request.user)
+
+    # Check if a refund request already exists
+    if RefundRequest.objects.filter(order_item=order_item).exists():
+        messages.warning(request, "Refund request already submitted for this item.")
+        return redirect('buyer_orders')
+
+    if request.method == 'POST':
+        reason = request.POST.get('reason', '').strip()
+        if not reason:
+            messages.error(request, "Please provide a reason for the refund.")
+            return render(request, 'main/request_refund.html', {'order_item': order_item})
+        
+        RefundRequest.objects.create(
+            order_item=order_item,
+            buyer=request.user,
+            reason=reason
+        )
+        messages.success(request, "Refund request submitted successfully!")
+        return redirect('buyer_orders')
+
+    return render(request, 'main/request_refund.html', {'order_item': order_item})
+
+
+
+@login_required
+def handle_refund(request, item_id, action):
+    item = get_object_or_404(OrderItem, id=item_id, product__seller=request.user)
+
+    if item.refund_status == 'requested':
+        if action == 'approve':
+            item.refund_status = 'approved'
+            # You can also adjust seller.site_balance -= item.subtotal() here
+            item.save()
+            messages.success(request, f"Refund approved for {item.product.name}.")
+        elif action == 'deny':
+            item.refund_status = 'denied'
+            item.save()
+            messages.warning(request, f"Refund denied for {item.product.name}.")
+    else:
+        messages.info(request, f"Refund for {item.product.name} already {item.refund_status}.")
+
+    return redirect('main/seller_refunds')
+
+
+@login_required
+def seller_refunds(request):
+    refund_requests = OrderItem.objects.filter(product__seller=request.user, refund_status='requested')
+    return render(request, 'main/seller_refunds.html', {'refund_requests': refund_requests})

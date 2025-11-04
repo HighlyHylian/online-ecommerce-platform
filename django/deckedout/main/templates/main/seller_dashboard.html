@@ -87,5 +87,46 @@
   <script src="{% static 'main/js/jquery-3.4.1.min.js' %}"></script>
   <script src="{% static 'main/js/bootstrap.js' %}"></script>
   <script src="{% static 'main/js/custom.js' %}"></script>
+<body>
+    <h1>Welcome, {{ user.username }} (Seller)</h1>
+    <p>Here you can manage your products, orders, and store info.</p>
+    <a href="{% url 'add_product' %}">Add New Product</a> |
+    <a href="{% url 'seller_orders'%}"> View Orders </a> |
+    <a href="{% url 'seller_payout'%}"> Payout Info </a> |
+    <a href="{% url 'seller_refunds'%}"> Refund Requests </a> |
+    <a href="{% url 'logout' %}">Logout</a>
+
+    <h2>Your Products</h2>
+
+    {% if products %}
+        {% for product in products %}
+        <div class="product-card">
+            <h3>{{ product.name }}</h3>
+            <p><strong>Price:</strong> ${{ product.price }}</p>
+            <p><strong>Description:</strong> {{ product.description }}</p>
+            <p><strong>Stock:</strong> {{ product.stock }}</p>
+
+
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% endif %}
+
+ 
+
+            <p class="product-status">
+                <strong>Status:</strong>
+                {% if product.is_approved %}
+                    Approved
+                {% else %}
+                    Pending Approval
+                {% endif %}
+            </p>
+
+            <a href="{% url 'edit_product' product.product_id %}">Edit</a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>You haven't added any products yet.</p>
+    {% endif %}
 </body>
 </html>
