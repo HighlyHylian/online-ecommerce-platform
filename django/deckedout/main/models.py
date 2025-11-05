@@ -84,7 +84,7 @@ class SellerBalance(models.Model):
         return f"{self.seller.username}'s Balance: ${self.site_balance}"
 
 
-class RefundRequest(models.Model):
+'''class RefundRequest(models.Model):
     order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE)
     buyer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     reason = models.TextField()
@@ -92,7 +92,26 @@ class RefundRequest(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Refund Request for {self.order_item.product.name} by {self.buyer.username}"
+        return f"Refund Request for {self.order_item.product.name} by {self.buyer.username}"'''
+
+from django.db import models
+from django.conf import settings
+
+class RefundRequest(models.Model):
+    order_item = models.ForeignKey('OrderItem', on_delete=models.CASCADE)
+    buyer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    reason = models.TextField(blank=True)
+    status = models.CharField(
+        max_length=20,
+        choices=[('requested', 'Requested'), ('approved', 'Approved'), ('denied', 'Denied')],
+        default='requested'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Refund for {self.order_item.product.name} ({self.status})"
+
+
 
 
 class Cart(models.Model):

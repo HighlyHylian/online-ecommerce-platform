@@ -32,48 +32,43 @@
       </div>
 
       {% if results %}
-      <div class="product_container">
-        <div class="row">
-          {% for product in results %}
-          <div class="col-md-4">
-            <div class="box" style="margin-bottom: 50px;">
-              <div class="img-box">
-                {% if product.image %}
-                  <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:200px; height:250px; object-fit:cover;">
-                {% else %}
-                  <img src="{% static 'main/images/p1.png' %}" alt="Default Image" style="width:200px; height:250px; object-fit:cover;">
-                {% endif %}
-              </div>
-              <div class="detail-box">
-                <h4>{{ product.name }}</h4>
-                <h6 class="price">
-                  <span class="new_price">${{ product.price }}</span>
-                </h6>
-                <p>{{ product.description|truncatewords:15 }}</p>
-                <a href="#">Buy Now</a>
+        <div class="product_container">
+          <div class="row">
+            {% for product in results %}
+            <div class="col-md-4">
+              <div class="box" style="margin-bottom: 50px;">
+                <div class="img-box">
+                  {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:200px; height:250px; object-fit:cover;">
+                  {% else %}
+                    <img src="{% static 'main/images/p1.png' %}" alt="Default Image" style="width:200px; height:250px; object-fit:cover;">
+                  {% endif %}
+                </div>
+                <div class="detail-box">
+                  <h5>{{ product.name }}</h5>
+                  <p>{{ product.description|truncatewords:15 }}</p>
+
+                  <!-- Buy Now Section -->
+                  {% if user.is_authenticated and user.role == 'buyer' %}
+                    <form method="POST" action="{% url 'add_to_cart' product.product_id %}">
+                      {% csrf_token %}
+                      <label for="quantity_{{ product.product_id }}">Quantity:</label>
+                      <input type="number" name="quantity" id="quantity_{{ product.product_id }}" 
+                            value="1" min="1" max="{{ product.stock }}" 
+                            style="width:60px; text-align:center;">
+                      <button type="submit" class="btn btn-danger mt-2">Add to Cart</button>
+                    </form>
+                  {% elif user.is_authenticated %}
+                    <p><em>Only buyers can add products to the cart.</em></p>
+                  {% else %}
+                    <p><em>Please <a href="{% url 'login' %}">login</a> to buy this product.</em></p>
+                  {% endif %}
+                </div>
               </div>
             </div>
+            {% endfor %}
           </div>
-          {% endfor %}
         </div>
-      </div>
       {% else %}
-        <p style="text-align:center; margin-top:20px;">No products found matching your search.</p>
+        <p>No products found for your search.</p>
       {% endif %}
-
-      <div style="text-align:center; margin-top:30px;">
-        <a href="{% url 'skateboards' %}" class="btn btn-primary">Back to Skateboards</a>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer_section">
-    <div class="container">
-      <p>&copy; <span id="displayYear"></span> All Rights Reserved By <a href="https://html.design/">Free Html Templates</a></p>
-    </div>
-  </footer>
-
-  <script src="{% static 'main/js/jquery-3.4.1.min.js' %}"></script>
-  <script src="{% static 'main/js/bootstrap.js' %}"></script>
-</body>
-</html>
