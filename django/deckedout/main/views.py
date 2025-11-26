@@ -424,3 +424,30 @@ def handle_refund(request, refund_id, action):
         messages.warning(request, f"Refund for {refund.order_item.product.name} denied.")
     refund.save()
     return redirect('seller_refunds')
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Product, Review, Order
+from .forms import ReviewForm
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def leave_review(request, order_id, product_id):
+    order = get_object_or_404(Order, id=order_id, buyer=request.user)
+    product = get_object_or_404(Product, id=product_id)
+
+    # Prevent reviewing an item twice
+    if Review.objects.filter(user=request.user, product=product).exists():
+        return redirect('buyer_orders')
+
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.product = product
+            review.save()
+            return redirect('buyer_orders')
+    else:
+        form = ReviewForm()
+
+    return render(request, 'leave_review.html', {'form': form, 'product': product})
