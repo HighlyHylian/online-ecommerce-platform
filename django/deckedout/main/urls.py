@@ -36,6 +36,8 @@ urlpatterns = [
     path('seller/payout/', views.seller_payout, name='seller_payout'),
     path('refund/<int:order_item_id>/', views.request_refund, name='request_refund'),
     path('refund/handle/<int:refund_id>/<str:action>/', views.handle_refund, name='handle_refund'),
+    path('review/<int:order_id>/<int:product_id>/', views.leave_review, name='leave_review'),
+
 
     path('seller/refunds/', views.seller_refunds, name='seller_refunds'),
 

@@ -451,3 +451,9 @@ def leave_review(request, order_id, product_id):
         form = ReviewForm()
 
     return render(request, 'leave_review.html', {'form': form, 'product': product})
+from django.db.models import Avg, Count
+
+products = Product.objects.annotate(
+    average_rating=Avg('reviews__rating'),
+    review_count=Count('reviews')
+)
