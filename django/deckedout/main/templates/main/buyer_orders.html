@@ -81,16 +81,26 @@
                                     </td>
 
                                     <!-- Review Button -->
-                                    <td style="padding:10px; text-align:center;">
-                                        {% if not item.product.reviews.filter(user=request.user).exists %}
-                                            <a href="{% url 'leave_review' order.id item.product.id %}"
-                                               style="background:#ffc107; color:black; padding:6px 12px; border-radius:6px; text-decoration:none;">
-                                                Leave Review ⭐
+                                    
+                                   <td style="padding:10px; text-align:center;">
+
+                                    {% if item.product %}
+                                        {% if not item.reviewed %}
+                                            <a href="{% url 'leave_review' item.id %}"
+                                                style="background:#ffc107; color:black; padding:6px 12px; border-radius:6px; text-decoration:none;">
+                                                    Leave Review ⭐
                                             </a>
+
                                         {% else %}
                                             <span style="color:green; font-weight:bold;">Reviewed ✔</span>
                                         {% endif %}
-                                    </td>
+                                    {% else %}
+                                        <span style="color:red; font-weight:bold;">Product Missing</span>
+                                    {% endif %}
+
+                                </td>
+
+
 
                                 </tr>
                             {% endfor %}

@@ -108,24 +108,24 @@
                 <h6 class="price"><span class="new_price">${{ product.price }}</span></h6>
                 <p>{{ product.description }}</p>
 
-                <!-- ⭐ STAR RATING ADDED BELOW — ONLY CHANGE MADE -->
-                <div class="star-rating" style="font-size: 20px; margin: 8px 0;">
+                <!-- ⭐⭐⭐⭐⭐ YELLOW STAR RATING (ONLY ADDITION) -->
+                <div class="star-rating" style="font-size: 20px; margin: 8px 0; color: gold;">
                   {% if product.average_rating %}
                     {% for i in "12345" %}
                       {% if forloop.counter <= product.average_rating %}
-                        ⭐
+                        ★
                       {% else %}
                         ☆
                       {% endif %}
                     {% endfor %}
-                    <span style="font-size: 14px; color: #555;">
+                    <span style="font-size: 14px; color: #333;">
                       {{ product.average_rating|floatformat:1 }} / 5 ({{ product.review_count }} reviews)
                     </span>
                   {% else %}
                     <span style="font-size: 14px; color: #555;">No reviews yet</span>
                   {% endif %}
                 </div>
-                <!-- ⭐ END STAR RATING -->
+                <!-- END STAR RATING -->
 
                 {% if user.is_authenticated and user.role == 'buyer' %}
                 <!-- Buy Now Button -->

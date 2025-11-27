@@ -344,11 +344,21 @@ def checkout(request):
 
 @login_required
 def buyer_orders(request):
+    # Block sellers + superusers
     if request.user.role != 'buyer' or request.user.is_superuser:
         messages.error(request, "You do not have permission to access this page.")
-        return redirect('index')  # or wherever you want sellers to go
+        return redirect('index')
+
+    # Get all orders placed by this buyer
     orders = request.user.orders_as_buyer.all().order_by('-created_at')
+
+    # Add a dynamic "reviewed" attribute for each item
+    for order in orders:
+        for item in order.items.all():
+            item.reviewed = item.product.reviews.filter(user=request.user).exists()
+
     return render(request, 'main/buyer_orders.html', {'orders': orders})
+
 
 
 # ===========================
@@ -430,10 +440,11 @@ from .models import Product, Review, Order
 from .forms import ReviewForm
 from django.contrib.auth.decorators import login_required
 
+# views.py
 @login_required
-def leave_review(request, order_id, product_id):
-    order = get_object_or_404(Order, id=order_id, buyer=request.user)
-    product = get_object_or_404(Product, id=product_id)
+def leave_review(request, order_item_id):
+    order_item = get_object_or_404(OrderItem, id=order_item_id, order__buyer=request.user)
+    product = order_item.product
 
     # Prevent reviewing an item twice
     if Review.objects.filter(user=request.user, product=product).exists():
@@ -450,7 +461,9 @@ def leave_review(request, order_id, product_id):
     else:
         form = ReviewForm()
 
-    return render(request, 'leave_review.html', {'form': form, 'product': product})
+    return render(request, 'main/leave_review.html', {'form': form, 'product': product})
+
+
 from django.db.models import Avg, Count
 
 products = Product.objects.annotate(
