@@ -41,6 +41,7 @@
                                 <th style="padding: 10px; text-align:center;">Review</th>
                             </tr>
                         </thead>
+                        
                         <tbody>
                             {% for item in order.items.all %}
                                 <tr style="border-bottom:1px solid #ddd;">
@@ -65,11 +66,11 @@
                                                     <span style="color:orange;">Pending</span>
                                                 {% elif refund.status == 'approved' %}
                                                     <span style="color:green;">Approved</span>
-                                                {% elif refund.status == 'denied' %}
+                                                {% else %}
                                                     <span style="color:red;">Denied</span>
                                                 {% endif %}
                                             {% else %}
-                                                <form method="post" action="{% url 'request_refund' item.id %}">
+                                                <form method="post" action="{% url 'request_refund' item.id %}" style="display:inline;">
                                                     {% csrf_token %}
                                                     <button type="submit" 
                                                         style="background:#007bff; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">
@@ -81,26 +82,17 @@
                                     </td>
 
                                     <!-- Review Button -->
-                                    
-                                   <td style="padding:10px; text-align:center;">
-
-                                    {% if item.product %}
+                                    <td style="padding:10px; text-align:center;">
                                         {% if not item.reviewed %}
-                                            <a href="{% url 'leave_review' item.id %}"
-                                                style="background:#ffc107; color:black; padding:6px 12px; border-radius:6px; text-decoration:none;">
-                                                    Leave Review ⭐
+                                            <a href="{% url 'leave_review' item.product.product_id %}" 
+                                            class="review-button" 
+                                            style="background:#ffc107; color:black; padding:6px 12px; border-radius:6px; text-decoration:none; display:inline-block; text-align:center;">
+                                                Leave Review ⭐
                                             </a>
-
                                         {% else %}
                                             <span style="color:green; font-weight:bold;">Reviewed ✔</span>
                                         {% endif %}
-                                    {% else %}
-                                        <span style="color:red; font-weight:bold;">Product Missing</span>
-                                    {% endif %}
-
-                                </td>
-
-
+                                    </td>
 
                                 </tr>
                             {% endfor %}
