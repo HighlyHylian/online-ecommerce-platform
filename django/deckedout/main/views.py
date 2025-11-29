@@ -440,8 +440,8 @@ from .models import Product, Review, Order
 from .forms import ReviewForm
 from django.contrib.auth.decorators import login_required
 
-# views.py
-@login_required
+
+'''@login_required
 def leave_review(request, order_item_id):
     order_item = get_object_or_404(OrderItem, id=order_item_id, order__buyer=request.user)
     product = order_item.product
@@ -461,7 +461,40 @@ def leave_review(request, order_item_id):
     else:
         form = ReviewForm()
 
-    return render(request, 'main/leave_review.html', {'form': form, 'product': product})
+    return render(request, 'main/leave_review.html', {'form': form, 'product': product})'''
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Product, Review
+@login_required
+def leave_review(request, product_id):
+    product = get_object_or_404(Product, product_id=product_id)
+
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+
+        Review.objects.create(
+            product=product,
+            user=request.user,
+            rating=rating,
+            comment=comment
+        )
+
+        return redirect('buyer_orders')  # or wherever you want to send them
+
+    return render(request, 'main/leave_review.html', {
+        'product': product
+    })
+
+
+from django.shortcuts import render
+from .models import Product
+
+def skateboards(request):
+    products = Product.objects.filter(is_approved=True).prefetch_related('reviews')
+    return render(request, 'main/skateboards.html', {'products': products})
+
 
 
 from django.db.models import Avg, Count

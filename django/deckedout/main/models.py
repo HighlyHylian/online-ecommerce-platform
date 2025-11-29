@@ -34,6 +34,17 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
+        # Helper method to calculate average rating
+    def average_rating(self):
+        reviews = self.reviews.all()
+        if not reviews:
+            return 0
+        return round(sum(r.rating for r in reviews) / reviews.count(), 1)
+
+    # Helper method to get review count
+    def review_count(self):
+        return self.reviews.count()
+    
 
 class Order(models.Model):
     buyer = models.ForeignKey(

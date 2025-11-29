@@ -38,9 +38,10 @@ urlpatterns = [
     path('refund/handle/<int:refund_id>/<str:action>/', views.handle_refund, name='handle_refund'),
 
 
-    #path('review/<int:order_item_id>/<int:product_id>/', views.leave_review, name='leave_review'),
-    # Only need the order_item_id
-    path('review/<int:order_item_id>/', views.leave_review, name='leave_review'),
+
+    #path('review/<int:order_item_id>/', views.leave_review, name='leave_review'),
+    path('review/<int:product_id>/', views.leave_review, name='leave_review'),
+
 
 
 
