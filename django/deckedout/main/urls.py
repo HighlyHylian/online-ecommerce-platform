@@ -1,10 +1,8 @@
 from django.urls import path
-from django.urls import path
-from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-
 from . import views
+
 
 urlpatterns = [
     path('', views.home, name='index'),
@@ -46,14 +44,8 @@ urlpatterns = [
 
 
     path('seller/refunds/', views.seller_refunds, name='seller_refunds'),
-
-    
-
-
-    
-    
-
-
+    path('seller/products/edit/<int:product_id>/', views.edit_product, name='edit_product'),
+    path('toggle-ban/<int:user_id>/', views.toggle_ban, name='toggle_ban'),
 ]
 
 

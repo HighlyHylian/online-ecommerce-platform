@@ -108,6 +108,10 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
+            if user.banned:  # 🔹 Block banned users
+                messages.error(request, 'Your account has been banned. Please contact support.')
+                return redirect('login')
+
             login(request, user)
             if user.is_superuser:
                 return redirect('admin_dashboard')
@@ -120,6 +124,8 @@ def login_view(request):
             return redirect('login')
 
     return render(request, 'main/login.html')
+
+
 
 
 def logout_view(request):
@@ -151,6 +157,16 @@ def seller_dashboard(request):
 def admin_dashboard(request):
     users = CustomUser.objects.all()
     return render(request, 'main/admin_dashboard.html', {'users': users})
+
+from django.shortcuts import get_object_or_404, redirect
+
+@user_passes_test(is_superuser)
+def toggle_ban(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    user.banned = not user.banned
+    user.save()
+    return redirect('admin_dashboard')
+
 
 
 # ===========================

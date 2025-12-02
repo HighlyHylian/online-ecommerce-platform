@@ -1,71 +1,98 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Seller Dashboard</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #333; }
-        a { text-decoration: none; color: #007BFF; margin-right: 10px; }
-        a:hover { text-decoration: underline; }
-        .product-card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            background: #f9f9f9;
-        }
-        .product-card img {
-            max-width: 150px;
-            display: block;
-            margin-top: 10px;
-        }
-        .product-status {
-            font-weight: bold;
-            margin-top: 5px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="shortcut icon" href="{% static 'main/images/favicon.png' %}" type="image/png">
+  <title>Seller Dashboard | Decked Out</title>
+
+  <!-- Include main site styles -->
+  <link rel="stylesheet" type="text/css" href="{% static 'main/css/bootstrap.css' %}">
+  <link href="{% static 'main/css/font-awesome.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'main/css/style.css' %}" rel="stylesheet" />
+  <link href="{% static 'main/css/responsive.css' %}" rel="stylesheet" />
 </head>
-<body>
-    <h1>Welcome, {{ user.username }} (Seller)</h1>
-    <p>Here you can manage your products, orders, and store info.</p>
-    <a href="{% url 'add_product' %}">Add New Product</a> |
-    <a href="{% url 'seller_orders'%}"> View Orders </a> |
-    <a href="{% url 'seller_payout'%}"> Payout Info </a> |
-    <a href="{% url 'seller_refunds'%}"> Refund Requests </a> |
-    <a href="{% url 'logout' %}">Logout</a>
 
-    <h2>Your Products</h2>
+<body class="sub_page">
+  <div class="hero_area">
+    <div class="hero_bg_box">
+      <img src="{% static 'main/images/slider-bg.jpg' %}" alt="">
+    </div>
 
-    {% if products %}
-        {% for product in products %}
-        <div class="product-card">
-            <h3>{{ product.name }}</h3>
-            <p><strong>Price:</strong> ${{ product.price }}</p>
-            <p><strong>Description:</strong> {{ product.description }}</p>
-            <p><strong>Stock:</strong> {{ product.stock }}</p>
+    <section class="heading_container heading_center text-white" style="padding: 50px 0;">
+      <div class="container">
+        <h2>Welcome, {{ user.username }} (Seller)</h2>
+        <p>Manage your products, orders, and store information below.</p>
+      </div>
+    </section>
+  </div>
 
+  <!-- Dashboard Section -->
+  <section class="layout_padding about_section">
+    <div class="container">
+      <div class="text-center mb-4">
+        <a href="{% url 'add_product' %}" class="btn btn-success m-2">Add Product</a>
+        <a href="{% url 'seller_orders' %}" class="btn btn-outline-success m-2">View Orders</a>
+        <a href="{% url 'seller_payout' %}" class="btn btn-outline-info m-2">Payout Info</a>
+        <a href="{% url 'seller_refunds' %}" class="btn btn-outline-warning m-2">Refund Requests</a>
+        <a href="{% url 'logout' %}" class="btn btn-danger m-2">Logout</a>
+      </div>
 
-            {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}">
-            {% endif %}
+      <h3 class="text-center mb-4">Your Products</h3>
 
- 
+      <div class="row">
+        {% if products %}
+          {% for product in products %}
+            <div class="col-md-4 mb-4">
+              <div class="box product-card">
+                <div class="img-box">
+                  {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                  {% else %}
+                    <img src="{% static 'main/images/default-product.png' %}" alt="No image">
+                  {% endif %}
+                </div>
+                <div class="detail-box">
+                  <h4>{{ product.name }}</h4>
+                  <p>{{ product.description }}</p>
+                  <p><strong>Price:</strong> ${{ product.price }}</p>
+                  <p><strong>Stock:</strong> {{ product.stock }}</p>
 
-            <p class="product-status">
-                <strong>Status:</strong>
-                {% if product.is_approved %}
-                    Approved
-                {% else %}
-                    Pending Approval
-                {% endif %}
-            </p>
+                  <p class="product-status">
+                    <strong>Status:</strong>
+                    {% if product.is_approved %}
+                      <span class="text-success">Approved</span>
+                    {% else %}
+                      <span class="text-warning">Pending Approval</span>
+                    {% endif %}
+                  </p>
 
-            <a href="{% url 'edit_product' product.product_id %}">Edit</a>
-        </div>
-        {% endfor %}
-    {% else %}
-        <p>You haven't added any products yet.</p>
-    {% endif %}
+                  <a href="{% url 'edit_product' product.product_id %}" class="btn btn-outline-primary btn-sm mt-2">Edit</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="text-center">
+            <p>You haven’t added any products yet.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer_section">
+    <div class="container">
+      <p class="text-center text-muted small">
+        <!-- &copy; <span id="displayYear"></span> All Rights Reserved by Decked Out -->
+      </p>
+    </div>
+  </footer>
+
+  <script src="{% static 'main/js/jquery-3.4.1.min.js' %}"></script>
+  <script src="{% static 'main/js/bootstrap.js' %}"></script>
+  <script src="{% static 'main/js/custom.js' %}"></script>
 </body>
 </html>
