@@ -6,7 +6,30 @@ from django.conf import settings
 
 
 
+from django.db import models
+from django.utils import timezone
 
+class FeedItem(models.Model):
+    EVENT_USER_CREATED = 'user_created'
+    EVENT_PRODUCT_CREATED = 'product_created'
+    EVENT_ADMIN_ACTION = 'admin_action'
+    EVENT_CHOICES = [
+        (EVENT_USER_CREATED, 'User created'),
+        (EVENT_PRODUCT_CREATED, 'Product created'),
+        (EVENT_ADMIN_ACTION, 'Admin action'),
+    ]
+
+    title = models.CharField(max_length=255)
+    link = models.URLField(blank=True, null=True)
+    description = models.TextField(blank=True)
+    pub_date = models.DateTimeField(default=timezone.now)
+    event_type = models.CharField(max_length=32, choices=EVENT_CHOICES)
+
+    class Meta:
+        ordering = ['-pub_date']
+
+    def __str__(self):
+        return f"{self.get_event_type_display()}: {self.title}"
 
 class CustomUser(AbstractUser):
     ROLE_CHOICES = (
