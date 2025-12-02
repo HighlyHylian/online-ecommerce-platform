@@ -34,19 +34,20 @@
               <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
               <li class="nav-item active"><a class="nav-link" href="{% url 'skateboards' %}">Skateboards</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'blog' %}">Blog</a></li>
+
+              {% if user.is_authenticated and user.role == 'buyer' %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'cart_view' %}" style="position: relative;">
                   <i class="fa fa-shopping-cart" style="font-size:20px;"></i>
                   {% if cart_item_count > 0 %}
-                    <span 
-                      style="position:absolute; top:0; right:-10px; background-color:red; color:white; 
-                            font-size:12px; border-radius:50%; padding:2px 6px;">
+                    <span style="position:absolute; top:0; right:-10px; background-color:red; color:white; 
+                                 font-size:12px; border-radius:50%; padding:2px 6px;">
                       {{ cart_item_count }}
                     </span>
                   {% endif %}
                 </a>
               </li>
-
+              {% endif %}
 
               {% if user.is_authenticated %}
                 <li class="nav-item dropdown ml-auto">
@@ -81,15 +82,9 @@
 
         <!-- Search Form -->
         <form method="GET" action="{% url 'product_search' %}" class="search-form mt-3" style="text-align:center;">
-          <input 
-            type="text" 
-            name="q" 
-            placeholder="Search for skateboards..." 
-            value="{{ request.GET.q }}" 
-            style="padding:8px; width:250px; border-radius:5px; border:1px solid #ccc;">
-          <button 
-            type="submit" 
-            style="padding:8px 15px; border:none; border-radius:5px; background-color:#ff4c4c; color:white; cursor:pointer;">
+          <input type="text" name="q" placeholder="Search for skateboards..." value="{{ request.GET.q }}" 
+                 style="padding:8px; width:250px; border-radius:5px; border:1px solid #ccc;">
+          <button type="submit" style="padding:8px 15px; border:none; border-radius:5px; background-color:#ff4c4c; color:white; cursor:pointer;">
             Search
           </button>
         </form>
@@ -113,13 +108,37 @@
                 <h6 class="price"><span class="new_price">${{ product.price }}</span></h6>
                 <p>{{ product.description }}</p>
 
-                <!-- Buy Now Button -->
+                <!-- ⭐ Star Rating Section -->
+                <div class="star-rating" style="font-size:20px; margin:8px 0; color:gold;">
+                  {% if product.review_count %}
+                    {% for i in "12345" %}
+                      {% if forloop.counter <= product.average_rating %}
+                        ★
+                      {% else %}
+                        ☆
+                      {% endif %}
+                    {% endfor %}
+                    <span style="font-size:14px; color:#333;">
+                      {{ product.average_rating }} / 5 ({{ product.review_count }} reviews)
+                    </span>
+                  {% else %}
+                    <span style="font-size:14px; color:#555;">No reviews yet</span>
+                  {% endif %}
+                </div>
+
+                {% if user.is_authenticated and user.role == 'buyer' %}
+                <!-- Add to Cart Button -->
                 <form method="POST" action="{% url 'add_to_cart' product.product_id %}">
                   {% csrf_token %}
                   <label for="quantity">Quantity:</label>
                   <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock }}" style="width:60px; text-align:center;">
-                  <button type="submit" class="btn btn-danger mt-2">Buy Now</button>
+                  <button type="submit" class="btn btn-danger mt-2">Add to Cart</button>
                 </form>
+                {% elif user.is_authenticated %}
+                <p><em>Only buyers can add products to the cart.</em></p>
+                {% else %}
+                <p><em>Please <a href="{% url 'login' %}">login</a> to buy this product.</em></p>
+                {% endif %}
 
               </div>
             </div>

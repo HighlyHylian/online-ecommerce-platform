@@ -9,21 +9,27 @@
 </head>
 <body>
     <div style="max-width: 900px; margin: 50px auto; background: #fff; padding: 30px; border-radius: 10px;">
+        
+        <!-- Header -->
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h2>📦 Your Order History</h2>
             <a href="{% url 'user_profile' %}" 
                style="background: #28a745; color: white; text-decoration: none; padding: 8px 16px; border-radius: 6px;">
-               ← Back to Dashboard
+                ← Back to Dashboard
             </a>
         </div>
+
         <hr style="margin: 15px 0;">
 
         {% if orders %}
             {% for order in orders %}
                 <div style="border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                    
+                    <!-- Order Header -->
                     <h3>Order #{{ order.id }} - {{ order.created_at|date:"M d, Y H:i" }}</h3>
                     <p><strong>Total Amount:</strong> ${{ order.amountDue }}</p>
 
+                    <!-- Items Table -->
                     <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
                         <thead>
                             <tr style="background-color: #007bff; color: white;">
@@ -32,15 +38,27 @@
                                 <th style="padding: 10px; text-align:center;">Price</th>
                                 <th style="padding: 10px; text-align:center;">Subtotal</th>
                                 <th style="padding: 10px; text-align:center;">Refund</th>
+                                <th style="padding: 10px; text-align:center;">Review</th>
                             </tr>
                         </thead>
+                        
                         <tbody>
                             {% for item in order.items.all %}
                                 <tr style="border-bottom:1px solid #ddd;">
+                                    
+                                    <!-- Product Name -->
                                     <td style="padding:10px;">{{ item.product.name }}</td>
+
+                                    <!-- Qty -->
                                     <td style="padding:10px; text-align:center;">{{ item.quantity }}</td>
+
+                                    <!-- Price -->
                                     <td style="padding:10px; text-align:center;">${{ item.pricePurchased }}</td>
+
+                                    <!-- Subtotal -->
                                     <td style="padding:10px; text-align:center;">${{ item.subtotal }}</td>
+
+                                    <!-- Refund Status -->
                                     <td style="padding:10px; text-align:center;">
                                         {% with refund=item.refundrequest_set.first %}
                                             {% if refund %}
@@ -48,19 +66,34 @@
                                                     <span style="color:orange;">Pending</span>
                                                 {% elif refund.status == 'approved' %}
                                                     <span style="color:green;">Approved</span>
-                                                {% elif refund.status == 'denied' %}
+                                                {% else %}
                                                     <span style="color:red;">Denied</span>
                                                 {% endif %}
                                             {% else %}
-                                                <form method="post" action="{% url 'request_refund' item.id %}">
+                                                <form method="post" action="{% url 'request_refund' item.id %}" style="display:inline;">
                                                     {% csrf_token %}
-                                                    <button type="submit" style="background:#007bff; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">
+                                                    <button type="submit" 
+                                                        style="background:#007bff; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">
                                                         Request Refund
                                                     </button>
                                                 </form>
                                             {% endif %}
                                         {% endwith %}
                                     </td>
+
+                                    <!-- Review Button -->
+                                    <td style="padding:10px; text-align:center;">
+                                        {% if not item.reviewed %}
+                                            <a href="{% url 'leave_review' item.product.product_id %}" 
+                                            class="review-button" 
+                                            style="background:#ffc107; color:black; padding:6px 12px; border-radius:6px; text-decoration:none; display:inline-block; text-align:center;">
+                                                Leave Review ⭐
+                                            </a>
+                                        {% else %}
+                                            <span style="color:green; font-weight:bold;">Reviewed ✔</span>
+                                        {% endif %}
+                                    </td>
+
                                 </tr>
                             {% endfor %}
                         </tbody>

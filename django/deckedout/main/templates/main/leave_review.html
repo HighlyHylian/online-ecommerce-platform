@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Review - {{ product.name }}</title>
+    <link rel="stylesheet" href="{% static 'main/css/bootstrap.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .stars {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]:checked ~ label.star,
+        label.star:hover,
+        label.star:hover ~ label.star {
+            color: gold;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+
+        button {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'user_profile' %}" 
+               style="background: #28a745; color: white; text-decoration: none; padding: 8px 16px; border-radius: 6px;">
+                ← Back to Dashboard
+            </a>
+        </div>
+    <div class="container">
+        <h2>Leave a Review for {{ product.name }}</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div>
+                <h4>Rating:</h4>
+                <div class="stars">
+                    {% for i in "54321" %}
+                        <input id="rating_{{ i }}" type="radio" name="rating" value="{{ i }}">
+                        <label class="star" for="rating_{{ i }}">★</label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div>
+                <h4>Comment:</h4>
+                <textarea name="comment" rows="4" placeholder="Write your review here..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit Review</button>
+
+
+        
+        </form>
+
+        <hr>
+
+        <h3>Existing Reviews</h3>
+        {% if product.reviews.exists %}
+            <ul class="list-group">
+                {% for review in product.reviews.all %}
+                <li class="list-group-item">
+                    <strong>{{ review.user.username }}</strong> &mdash;
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= review.rating %}
+                            <span style="color: gold;">★</span>
+                        {% else %}
+                            <span style="color: #ccc;">★</span>
+                        {% endif %}
+                    {% endfor %}
+                    <p>{{ review.comment }}</p>
+                    <small class="text-muted">{{ review.created_at|date:"M d, Y H:i" }}</small>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No reviews yet. Be the first to review!</p>
+        {% endif %}
+    </div>
+
+    <script>
+        // Optional: highlight stars on hover dynamically (pure JS)
+        const stars = document.querySelectorAll('.star');
+        stars.forEach(star => {
+            star.addEventListener('mouseover', () => {
+                stars.forEach(s => s.style.color = '#ccc');
+                let rating = parseInt(star.getAttribute('for').split('_')[1]);
+                for(let i=0; i<rating; i++){
+                    document.getElementById('rating_' + (5-i)).nextElementSibling.style.color = 'gold';
+                }
+            });
+            star.addEventListener('mouseout', () => {
+                // reset based on checked input
+                stars.forEach(s => {
+                    let input = document.getElementById(s.getAttribute('for'));
+                    if(input.checked){
+                        s.style.color = 'gold';
+                    } else {
+                        s.style.color = '#ccc';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
