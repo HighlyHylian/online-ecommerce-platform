@@ -27,9 +27,11 @@ jobs:
     - name: Run migrations
       run: |
         cd django/deckedout
-        python manage.py migrate --noinput
+        python manage.py migrate --noinput --settings=deckedout.settings_ci
 
     - name: Run tests
       run: |
         cd django/deckedout
-        python manage.py test main --verbosity=2
+        python manage.py test main --verbosity=2 --settings=deckedout.settings_ci
+
+
