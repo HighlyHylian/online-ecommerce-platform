@@ -26,8 +26,10 @@ jobs:
 
     - name: Run migrations
       run: |
+        cd django/deckedout
         python manage.py migrate --noinput
 
     - name: Run tests
       run: |
+        cd django/deckedout
         python manage.py test main --verbosity=2
