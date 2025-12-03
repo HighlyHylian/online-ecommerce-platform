@@ -109,9 +109,9 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            if user.banned:  # 🔹 Block banned users
-                messages.error(request, 'Your account has been banned. Please contact support.')
-                return redirect('login')
+            if user.banned:
+                messages.error(request, "Your account is banned")
+                return render(request, "main/login.html")
 
             login(request, user)
             if user.is_superuser:
@@ -212,9 +212,11 @@ def add_product(request):
         if form.is_valid():
             product = form.save(commit=False)
             product.seller = request.user
+            product.stock = form.cleaned_data.get('stock', 0)
             product.save()
             messages.success(request, "Product submitted for admin approval!")
             return redirect('seller_dashboard')
+
     else:
         form = ProductForm()
     return render(request, 'main/add_product.html', {'form': form})
@@ -485,29 +487,37 @@ def leave_review(request, order_item_id):
 
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Review
+from django.http import HttpResponseForbidden
+from .models import OrderItem
+
 @login_required
 def leave_review(request, product_id):
     product = get_object_or_404(Product, product_id=product_id)
 
+    # Prevent seller reviewing own product
     if request.user == product.seller:
         return HttpResponseForbidden("Sellers cannot review their own products.")
 
+    # Prevent buyer reviewing without purchase
+    purchased = OrderItem.objects.filter(order__buyer=request.user, product=product).exists()
+    if not purchased:
+        messages.error(request, "You cannot review a product you haven't purchased.")
+        return redirect('buyer_orders')
+
+    # Prevent duplicate reviews
+    if Review.objects.filter(product=product, user=request.user).exists():
+        messages.error(request, "You have already reviewed this product.")
+        return redirect('buyer_orders')
+
     if request.method == 'POST':
-        rating = request.POST.get('rating')
-        comment = request.POST.get('comment')
+        rating = int(request.POST.get('rating', 5))
+        comment = request.POST.get('comment', '')
+        Review.objects.create(product=product, user=request.user, rating=rating, comment=comment)
+        messages.success(request, "Review submitted successfully!")
+        return redirect('buyer_orders')
 
-        Review.objects.create(
-            product=product,
-            user=request.user,
-            rating=rating,
-            comment=comment
-        )
+    return render(request, 'main/leave_review.html', {'product': product})
 
-        return redirect('buyer_orders')  # or wherever you want to send them
-
-    return render(request, 'main/leave_review.html', {
-        'product': product
-    })
 
 
 from django.shortcuts import render
