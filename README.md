@@ -25,7 +25,7 @@ Our goals are to:
 
 ## Tech Stack  
 - Framework: Django (Python)  
-- Database: MySQL  
+- Database: Postgres  
 - Languages: Python, HTML, CSS, JavaScript  
 - Version Control: Git & GitHub  
 
