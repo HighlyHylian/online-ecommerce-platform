@@ -83,3 +83,39 @@ tr:hover {
 .role.admin {
     background-color: #007bff;
 }
+
+/* Ban/Unban buttons */
+.ban-btn {
+    background-color: #d9534f; /* red for banning */
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.ban-btn:hover {
+    background-color: #c9302c; /* darker red on hover */
+}
+
+.unban-btn {
+    background-color: #5cb85c; /* green for unbanning */
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.unban-btn:hover {
+    background-color: #449d44; /* darker green on hover */
+}
+
+/* Keep table forms aligned nicely */
+td form {
+    margin: 0;
+}

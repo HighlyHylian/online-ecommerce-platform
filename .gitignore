@@ -2,3 +2,8 @@ __pycache__/
 *.pyc
 *.pyo
 .vscode
+*.env
+.env
+/django/deckedout/venv
+"django/deckedout/db.sqlite3" 
+django/deckedout/db.sqlite3

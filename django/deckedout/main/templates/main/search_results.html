@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results - Decked Out</title>
+  <link rel="stylesheet" href="{% static 'main/css/bootstrap.css' %}">
+  <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+</head>
+<body class="sub_page">
+
+  <header class="header_section">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg custom_nav-container">
+        <a class="navbar-brand" href="{% url 'index' %}"><span>Decked Out</span></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'skateboards' %}">Skateboards</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'blog' %}">Blog</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="product_section">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>Search Results for "{{ query }}"</h2>
+      </div>
+
+      {% if results %}
+        <div class="product_container">
+          <div class="row">
+            {% for product in results %}
+            <div class="col-md-4">
+              <div class="box" style="margin-bottom: 50px;">
+                <div class="img-box">
+                  {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:200px; height:250px; object-fit:cover;">
+                  {% else %}
+                    <img src="{% static 'main/images/p1.png' %}" alt="Default Image" style="width:200px; height:250px; object-fit:cover;">
+                  {% endif %}
+                </div>
+                <div class="detail-box">
+                  <h5>{{ product.name }}</h5>
+                  <p>{{ product.description|truncatewords:15 }}</p>
+
+                  <!-- Buy Now Section -->
+                  {% if user.is_authenticated and user.role == 'buyer' %}
+                    <form method="POST" action="{% url 'add_to_cart' product.product_id %}">
+                      {% csrf_token %}
+                      <label for="quantity_{{ product.product_id }}">Quantity:</label>
+                      <input type="number" name="quantity" id="quantity_{{ product.product_id }}" 
+                            value="1" min="1" max="{{ product.stock }}" 
+                            style="width:60px; text-align:center;">
+                      <button type="submit" class="btn btn-danger mt-2">Add to Cart</button>
+                    </form>
+                  {% elif user.is_authenticated %}
+                    <p><em>Only buyers can add products to the cart.</em></p>
+                  {% else %}
+                    <p><em>Please <a href="{% url 'login' %}">login</a> to buy this product.</em></p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+        <p>No products found for your search.</p>
+      {% endif %}

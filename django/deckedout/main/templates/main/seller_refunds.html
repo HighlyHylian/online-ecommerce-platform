@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seller Refund Requests</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px;">
+    <div style="max-width: 800px; margin: auto; background: #fff; padding: 30px; border-radius: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>💰 Refund Requests</h2>
+            <a href="{% url 'seller_dashboard' %}" 
+               style="background:#007bff; color:white; text-decoration:none; padding:8px 16px; border-radius:6px;">
+               ← Back to Dashboard
+            </a>
+        </div>
+        <hr>
+
+        {% for refund in refund_requests %}
+            <div style="border:1px solid #ccc; padding:15px; margin:15px 0; border-radius:6px;">
+                <p><strong>{{ refund.order_item.product.name }}</strong></p>
+                <p><strong>Buyer:</strong> {{ refund.buyer.username }}</p>
+                <p><strong>Reason:</strong> {{ refund.reason }}</p>
+                <p><strong>Status:</strong> {{ refund.status|capfirst }}</p>
+
+                <div style="margin-top:10px;">
+                    <a href="{% url 'handle_refund' refund.id 'approve' %}" 
+                       style="color:white; background:green; padding:6px 12px; border-radius:4px; text-decoration:none;">Approve</a>
+                    <a href="{% url 'handle_refund' refund.id 'deny' %}" 
+                       style="color:white; background:red; padding:6px 12px; border-radius:4px; text-decoration:none; margin-left:5px;">Deny</a>
+                </div>
+            </div>
+        {% empty %}
+            <p style="text-align:center; color:#666;">No refund requests at this time.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

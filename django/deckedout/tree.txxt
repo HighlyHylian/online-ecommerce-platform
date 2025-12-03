@@ -1,0 +1,74 @@
+Folder PATH listing
+Volume serial number is 78BD-D848
+C:.
+   .deployment
+   .env
+   conftest.py
+   db.sqlite3
+   manage.py
+   pytest.ini
+   requirements.txt
+   tree.txxt
+   
++---.pytest_cache
+      .gitignore
+      CACHEDIR.TAG
+      README.md
+      
+   +---v
+       +---cache
+               lastfailed
+               nodeids
+               
++---deckedout
+      asgi.py
+      settings.py
+      urls.py
+      wsgi.py
+      __init__.py
+      
+   +---__pycache__
+           settings.cpython-313.pyc
+           urls.cpython-313.pyc
+           wsgi.cpython-313.pyc
+           __init__.cpython-313.pyc
+           
++---main
+      admin.py
+      apps.py
+      forms.py
+      LatestFeed.py
+      models.py
+      signals.py
+      tests.py
+      urls.py
+      views.py
+      __init__.py
+   +---tests
+         test_auth.py
+         test_products.py
+         test_reviews.py
+         __init__.py
+         
+      +---acceptance
+            test_add_to_cart.py
+            test_checkout_flow.py
+            test_homepage.py
+            test_reviews.py
+            test_seller_add_product.py
+            test_user_roles.py
+            
+         +---__pycache__
+                 test_add_to_cart.cpython-313-pytest-9.0.1.pyc
+                 test_checkout_flow.cpython-313-pytest-9.0.1.pyc
+                 test_homepage.cpython-313-pytest-9.0.1.pyc
+                 test_reviews.cpython-313-pytest-9.0.1.pyc
+                 test_seller_add_product.cpython-313-pytest-9.0.1.pyc
+                 test_user_roles.cpython-313-pytest-9.0.1.pyc
+                 
+      +---__pycache__
+              test_auth.cpython-313.pyc
+              test_products.cpython-313.pyc
+              test_reviews.cpython-313.pyc
+              __init__.cpython-313.pyc
+              

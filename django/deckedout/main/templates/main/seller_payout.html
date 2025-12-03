@@ -1,0 +1,19 @@
+<h2>Seller Payout</h2>
+
+
+    <!-- Back to Dashboard Link -->
+    <p style="margin-bottom:20px;">
+        <a href="{% url 'seller_dashboard' %}" style="text-decoration:none; color:#007bff;">
+            ← Back to Dashboard
+        </a>
+    </p>
+<p>Unclaimed Balance: ${{ balance.site_balance }}</p>
+
+<form method="POST">
+  {% csrf_token %}
+  <button type="submit">Claim Balance</button>
+</form>
+
+{% for message in messages %}
+  <p>{{ message }}</p>
+{% endfor %}

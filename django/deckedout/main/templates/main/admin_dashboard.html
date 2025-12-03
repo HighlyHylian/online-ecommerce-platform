@@ -18,6 +18,10 @@
         </header>
 
         <section class="dashboard-content">
+            <div class="dashboard-actions">
+                <a href="{% url 'admin_approve' %}" class="approve-btn">Approve Seller Products</a>
+            </div>
+
             <h2>Registered Users</h2>
             <table>
                 <thead>
@@ -27,6 +31,7 @@
                         <th>Role</th>
                         <th>Active</th>
                         <th>Joined</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,20 +40,35 @@
                             <td>{{ user.username }}</td>
                             <td>{{ user.email }}</td>
                             <td>
-                                {% if user.role == "seller" %}
+                                {% if user.is_superuser %}
+                                    <span class="role admin">Admin</span>
+                                {% elif user.role == "seller" %}
                                     <span class="role seller">Seller</span>
                                 {% elif user.role == "buyer" %}
                                     <span class="role buyer">Buyer</span>
-                                {% else %}
-                                    <span class="role admin">Admin</span>
                                 {% endif %}
                             </td>
                             <td>{{ user.is_active|yesno:"Yes,No" }}</td>
                             <td>{{ user.date_joined|date:"M d, Y" }}</td>
+                            <td>
+                                {% if not user.is_superuser %}
+                                    <form action="{% url 'toggle_ban' user.id %}" method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        {% if not user.banned %}
+                                            <button type="submit" class="ban-btn" onclick="return confirm('Ban this user?')">Ban</button>
+                                        {% else %}
+                                            <button type="submit" class="unban-btn" onclick="return confirm('Unban this user?')">Unban</button>
+                                        {% endif %}
+
+                                    </form>
+                                {% else %}
+                                    <em>—</em>
+                                {% endif %}
+                            </td>
                         </tr>
                     {% empty %}
                         <tr>
-                            <td colspan="5">No users found.</td>
+                            <td colspan="6">No users found.</td>
                         </tr>
                     {% endfor %}
                 </tbody>
