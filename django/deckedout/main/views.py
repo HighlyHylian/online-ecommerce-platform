@@ -6,6 +6,7 @@
 from decimal import Decimal
 
 # Django imports
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -204,6 +205,8 @@ def admin_approve(request):
 
 @login_required
 def add_product(request):
+    if not request.user.role == 'seller':
+        return HttpResponseForbidden("Only sellers can add products.")
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
@@ -485,6 +488,9 @@ from .models import Product, Review
 @login_required
 def leave_review(request, product_id):
     product = get_object_or_404(Product, product_id=product_id)
+
+    if request.user == product.seller:
+        return HttpResponseForbidden("Sellers cannot review their own products.")
 
     if request.method == 'POST':
         rating = request.POST.get('rating')
